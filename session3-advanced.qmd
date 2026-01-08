@@ -1,0 +1,854 @@
+---
+title: "Data Registry Framework"
+subtitle: "Session 3: Advanced Topics & Adoption"
+author: "Cooper Lab"
+format:
+  revealjs:
+    theme: [default, custom.scss]
+    slide-number: true
+    chalkboard: true
+    preview-links: auto
+    code-line-numbers: false
+    highlight-style: github
+---
+
+## Session 3 Goals {.smaller}
+
+**Advanced topics for power users:**
+
+1. Publishing derived datasets to the registry
+2. Enclave workflows for highly sensitive data
+3. Collaboration patterns and access control
+4. Migration strategies for existing projects
+5. Governance and organizational adoption
+6. Roadmap and future capabilities
+
+**Audience:** Data managers, infrastructure admins, experienced users
+
+::: {.notes}
+This session is more technical and strategic. Not everyone needs this level of detail, but power users and administrators will benefit from understanding the full capabilities.
+:::
+
+---
+
+## Publishing Derived Datasets {.smaller}
+
+**Scenario:** You've created analysis-ready data that others should use
+
+**Example:** Merged CMS provider + claims data for specific research questions
+
+**Why publish?**
+
+- Avoid duplication of effort
+- Ensure team uses same version
+- Document transformation methodology
+- Enable reproducibility
+
+**Process:** Same as creating any data project + registration
+
+::: {.notes}
+Derived datasets are valuable lab assets. Publishing them prevents everyone from doing the same merge independently. Ensures consistency across projects.
+:::
+
+---
+
+## Derived Dataset Workflow
+
+```{mermaid}
+%%| fig-width: 10
+flowchart TB
+    A[Source Dataset 1] --> C[Analysis Project]
+    B[Source Dataset 2] --> C
+    C --> D[Derived Dataset Created]
+    D --> E[Document Methodology]
+    E --> F[Register as New Data Product]
+    F --> G[Available in Catalog]
+    G --> H[Other Researchers Use It]
+
+    style D fill:#ffe1e1
+    style F fill:#e1f5ff
+    style H fill:#e1ffe1
+```
+
+**Key:** Track dependencies on source datasets in metadata
+
+::: {.notes}
+Show the complete flow. Derived datasets should reference their sources. This creates a data lineage graph that documents how everything is connected.
+:::
+
+---
+
+## Example: Publishing Merged Dataset {.smaller}
+
+```bash
+# Create a data project for derived dataset
+mint create data --name cms_provider_claims_merged --lang stata
+
+# Document the merge in README.md
+# - Which datasets were merged
+# - What join keys were used
+# - What filters were applied
+# - What variables were kept
+
+# Update metadata.json with dependencies
+# Add tags for discoverability
+
+# Register with catalog
+mint registry register
+```
+
+**Critical:** Document the methodology so others can trust it
+
+::: {.notes}
+Derived datasets need extra documentation. How were the sources combined? What assumptions were made? What quality checks were performed? This builds trust.
+:::
+
+---
+
+## Metadata for Derived Datasets {.smaller}
+
+```json
+{
+  "project": {
+    "name": "cms_provider_claims_merged",
+    "type": "data"
+  },
+  "metadata": {
+    "description": "CMS provider and claims data merged by NPI",
+    "tags": ["cms", "derived", "provider", "claims"],
+    "dependencies": [
+      "data_cms-provider-data-service",
+      "data_cms-claims-2024"
+    ]
+  },
+  "lineage": {
+    "sources": ["cms-provider v1.2", "cms-claims v2.3"],
+    "transformation": "src/merge_provider_claims.do",
+    "date_created": "2024-01-15"
+  }
+}
+```
+
+::: {.notes}
+Dependencies section is key. This documents the data lineage. Future researchers can trace back to original sources. Lineage section is optional but valuable for complex transformations.
+:::
+
+---
+
+## Enclave Workflows: The Challenge {.smaller}
+
+**Secure enclaves (FISMA, PHI environments):**
+
+- Air-gapped: no direct internet access
+- Strict controls on data transfer
+- Need audit trail for compliance
+- Can't just `git clone` or `dvc pull`
+
+**Challenge:** How do we maintain reproducibility and provenance in these environments?
+
+::: {.notes}
+Enclaves are increasingly common for sensitive health data. The usual workflows don't work because you can't download from internet. Need a different approach.
+:::
+
+---
+
+## Enclave Solution: Manifest-Based Transfer
+
+**Concept:** Track approved datasets and package them for transfer
+
+```{mermaid}
+%%| fig-width: 10
+flowchart LR
+    A[Data Registry] --> B[Enclave Manifest]
+    B --> C[Package Datasets]
+    C --> D[Cryptographic Verification]
+    D --> E[Physical Transfer USB]
+    E --> F[Verify Inside Enclave]
+    F --> G[Unpack Datasets]
+
+    style B fill:#ffe1e1
+    style D fill:#fff5e1
+    style F fill:#e1ffe1
+```
+
+**Result:** Provenance tracked, compliance maintained, reproducibility preserved
+
+::: {.notes}
+The enclave workflow maintains all the benefits of the registry even in air-gapped environments. Manifests track what's approved. Cryptographic verification ensures data integrity.
+:::
+
+---
+
+## Creating an Enclave Workspace {.smaller}
+
+```bash
+# Create enclave workspace
+mint create enclave --name fisma_research \
+  --registry-url https://github.com/cooper-lab-yale/data-registry
+
+# Workspace structure created:
+# enclave_fisma_research/
+# ├── manifest.yaml          # Approved datasets
+# ├── scripts/
+# │   ├── download.py        # Pull from registry
+# │   ├── package.py         # Create transfer bundle
+# │   └── verify.py          # Verify integrity
+# └── data/                  # Downloaded datasets
+```
+
+::: {.notes}
+Enclave workspace is a special project type. It manages the list of approved datasets and provides tools for packaging and verification.
+:::
+
+---
+
+## Adding Datasets to Enclave {.smaller}
+
+```bash
+cd enclave_fisma_research
+
+# Add approved dataset to manifest
+mint enclave add data_cms-provider-data-service
+
+# Pull the data (outside enclave, on internet-connected machine)
+mint enclave pull data_cms-provider-data-service
+
+# Pull all approved datasets
+mint enclave pull --all
+```
+
+**Manifest tracks:**
+
+- Dataset name and version
+- Git commit hash
+- DVC file checksums
+- Approval date and approver
+
+::: {.notes}
+The manifest is the source of truth for what data is allowed in the enclave. Adding to manifest requires proper authorization. Pull commands download everything needed for transfer.
+:::
+
+---
+
+## Packaging for Transfer {.smaller}
+
+```bash
+# Package datasets for transfer to enclave
+mint enclave package --name fisma_transfer_2024_01
+
+# Creates:
+# fisma_transfer_2024_01/
+# ├── datasets/              # All data files
+# ├── manifest.yaml          # What's included
+# ├── checksums.txt          # Cryptographic hashes
+# └── README.txt             # Transfer instructions
+```
+
+**Transfer package includes:**
+
+- All data files
+- Git repositories
+- Verification scripts
+- Documentation
+
+::: {.notes}
+The package is self-contained. Can be transferred via USB, secure file transfer, or other approved method. Checksums ensure no corruption during transfer.
+:::
+
+---
+
+## Verification Inside Enclave {.smaller}
+
+```bash
+# Inside the enclave, verify the transfer
+python verify.py fisma_transfer_2024_01/
+
+# Checks:
+# ✓ All expected files present
+# ✓ Checksums match
+# ✓ No unexpected files
+# ✓ Manifest signature valid
+
+# If verification passes, unpack datasets
+python verify.py --unpack fisma_transfer_2024_01/
+```
+
+**Audit trail:** All verifications logged for compliance
+
+::: {.notes}
+Verification is critical. Ensures data wasn't tampered with during transfer. Creates an audit trail showing what data entered the enclave and when. Compliance officers love this.
+:::
+
+---
+
+## Enclave Use Case: HIPAA Research {.smaller}
+
+**Scenario:** Analyzing patient-level Medicare data
+
+1. Researcher requests access to specific datasets
+2. Data governance committee approves
+3. Datasets added to enclave manifest
+4. Data packaged and transferred by admin
+5. Researcher verifies and unpacks inside enclave
+6. Analysis proceeds with full provenance tracking
+
+**Benefit:** Compliance without sacrificing reproducibility
+
+::: {.notes}
+Real-world example. HIPAA requires careful control of PHI. Enclave workflow provides that control while maintaining research rigor. Every step is documented and auditable.
+:::
+
+---
+
+## Collaboration: Internal Teams {.smaller}
+
+**Scenario:** Multiple research projects using shared data
+
+**Access control strategy:**
+
+```yaml
+access_control:
+  teams:
+    - team: infrastructure-admins
+      permission: admin
+    - team: all-researchers
+      permission: read
+    - team: project-leads
+      permission: read-write
+```
+
+**Workflow:**
+
+- All researchers can discover and use datasets
+- Project leads can update their own datasets
+- Admins manage infrastructure
+
+::: {.notes}
+Team-based permissions scale well. Don't manage individual access for every dataset. Use teams that align with organizational structure.
+:::
+
+---
+
+## Collaboration: External Partners
+
+**Scenario:** Collaborating with researchers at another institution
+
+**Strategy: Repository mirroring**
+
+```yaml
+repository:
+  github_url: https://github.com/cooper-lab-yale/data_study_x
+  visibility: private
+  mirror:
+    url: https://github.com/Cooper-lab/data_study_x
+    purpose: external_collaboration
+```
+
+**Workflow:**
+
+- Internal repository remains private
+- Mirror repository shared with collaborators
+- Automatic sync via GitHub Actions
+- Separate access control for each
+
+::: {.notes}
+Mirroring enables controlled sharing. Internal repository has full lab access. Mirror has selective access for external collaborators. Sync keeps them consistent.
+:::
+
+---
+
+## Access Control: Sensitivity Levels
+
+**Three tiers:**
+
+**Public:** No restrictions
+
+- Reference datasets
+- Published data
+- Documentation
+
+**Restricted:** Lab members only
+
+- Unpublished research data
+- Proprietary datasets
+- Pre-publication analyses
+
+**Confidential:** Named individuals only
+
+- PHI/PII
+- Data use agreement required
+- Special handling
+
+::: {.notes}
+Sensitivity classification drives access controls and handling procedures. Public data is easy. Confidential requires extra governance and compliance measures.
+:::
+
+---
+
+## Governance: Review Process
+
+**Who can register datasets?**
+
+- Anyone can create PR to register
+- Infrastructure admin reviews and approves
+- Automated validation checks run first
+
+**Review checklist:**
+
+- [ ] Metadata is complete
+- [ ] Sensitivity classification is correct
+- [ ] Access controls are appropriate
+- [ ] README documentation exists
+- [ ] Data use agreement on file (if applicable)
+
+::: {.notes}
+Registration isn't automatic. Human review ensures quality and compliance. Automated checks catch technical issues. Human reviewer checks policy compliance.
+:::
+
+---
+
+## Governance: Roles and Responsibilities
+
+**Infrastructure Admins:**
+
+- Manage data-registry repository
+- Review and merge registration PRs
+- Configure GitHub/S3 permissions
+- Maintain documentation
+
+**Data Stewards (optional):**
+
+- Review data quality
+- Ensure metadata standards
+- Coordinate with compliance office
+
+**Dataset Owners:**
+
+- Maintain their datasets
+- Update documentation
+- Respond to user questions
+
+::: {.notes}
+Clear roles prevent confusion. Infrastructure admins handle technical infrastructure. Dataset owners are responsible for their data. Data stewards (if you have them) ensure quality standards.
+:::
+
+---
+
+## Migration: Existing Projects
+
+**You have 50 existing projects in Dropbox. Now what?**
+
+**Migration strategy:**
+
+1. Prioritize high-value datasets
+2. Create mint projects for each
+3. Document with metadata
+4. Register in catalog
+5. Migrate users gradually
+
+**Don't:** Try to migrate everything at once
+
+**Do:** Start with most-used datasets
+
+::: {.notes}
+Migration is gradual. Don't force everyone to switch immediately. Migrate high-value datasets first. Let early adopters prove the value. Others will follow.
+:::
+
+---
+
+## Migration Workflow
+
+```bash
+# For each existing dataset:
+
+# 1. Create project structure
+mint create data --name existing_dataset --lang stata --use-current-repo
+
+# 2. Organize files into standard structure
+# - Move raw data to data/raw/
+# - Move scripts to src/
+# - Create README
+
+# 3. Add to version control
+git add .
+git commit -m "Migrate existing dataset to mint structure"
+
+# 4. Track data with DVC
+dvc add data/raw/*.dta
+dvc push
+
+# 5. Register with catalog
+mint registry register
+```
+
+::: {.notes}
+Step-by-step migration. The --use-current-repo flag handles existing git repos. Organizing files is manual but guided by templates. Registration makes it discoverable.
+:::
+
+---
+
+## Measuring Success
+
+**Metrics to track:**
+
+- Number of registered datasets
+- Number of active users
+- Time to onboard new researchers
+- Datasets reused across projects
+- Compliance audit findings
+
+**Qualitative indicators:**
+
+- "I found the data I needed in 5 minutes"
+- "New postdoc was productive on day 1"
+- "IRB audit had no findings"
+
+::: {.notes}
+Track both quantitative and qualitative metrics. Numbers show adoption. User testimonials show value. Compliance success shows risk reduction.
+:::
+
+---
+
+## Adoption Roadmap: Phase 1 (Months 1-3)
+
+**Goals:**
+
+- Infrastructure setup complete
+- Core documentation written
+- 5-10 pilot datasets registered
+- Early adopters trained
+
+**Success criteria:**
+
+- Catalog searchable
+- Registration workflow working
+- At least one success story
+
+::: {.notes}
+Start small. Get infrastructure working. Recruit early adopters who will provide feedback. Document success stories to motivate wider adoption.
+:::
+
+---
+
+## Adoption Roadmap: Phase 2 (Months 4-6)
+
+**Goals:**
+
+- All new projects use mint
+- 25-50% of valuable datasets migrated
+- Training sessions held
+- Documentation refined based on feedback
+
+**Success criteria:**
+
+- Self-service works for basic cases
+- Support burden is manageable
+- Positive user feedback
+
+::: {.notes}
+Expand adoption. Make it the default for new projects. Migrate most-used existing datasets. Refine processes based on real usage.
+:::
+
+---
+
+## Adoption Roadmap: Phase 3 (Months 7-12)
+
+**Goals:**
+
+- 75%+ of active datasets in registry
+- Compliance office integration
+- Automated reporting
+- External collaboration enabled
+
+**Success criteria:**
+
+- Registry is "how we work"
+- Reduced support burden (self-service)
+- Measurable productivity gains
+
+::: {.notes}
+Full adoption. Registry becomes the standard way of working. Automation reduces overhead. Integration with institutional processes (IRB, compliance) complete.
+:::
+
+---
+
+## Common Challenges & Solutions
+
+**Challenge:** "Too much overhead for small projects"
+
+**Solution:** Templates make it fast. 5 minutes to create project structure.
+
+**Challenge:** "I don't want to learn Git"
+
+**Solution:** Wrapper functions hide complexity. Basic use is simple.
+
+**Challenge:** "What if the framework changes?"
+
+**Solution:** Standards-based (Git, DVC, YAML). Can always export.
+
+::: {.notes}
+Address common objections proactively. Most concerns come from unfamiliarity. Once people see how fast and simple it is, resistance decreases.
+:::
+
+---
+
+## Support Strategy
+
+**Tiered support model:**
+
+**Self-service:**
+
+- Comprehensive documentation
+- Video tutorials
+- Example projects
+
+**Peer support:**
+
+- Lab Slack channel
+- GitHub Discussions
+
+**Direct support:**
+
+- Office hours (weekly)
+- Email for urgent issues
+
+**Key:** Make self-service so good that most questions are answered there
+
+::: {.notes}
+Support burden must be sustainable. Invest in documentation and examples upfront. Peer support builds community. Reserve direct support for complex issues.
+:::
+
+---
+
+## Future Capabilities
+
+**Planned enhancements:**
+
+- **Web interface** for browsing catalog (no more GitHub search)
+- **API access** for programmatic discovery
+- **Usage analytics** to track dataset popularity
+- **Citation tracking** for datasets used in publications
+- **Automated quality checks** on data updates
+- **Integration with lab notebooks** (electronic lab notebooks)
+
+::: {.notes}
+Show the vision. Current system works, but there's room for improvement. Web interface is highest priority - will make discovery much easier for non-technical users.
+:::
+
+---
+
+## Web Interface Preview
+
+**Planned features:**
+
+- Browse datasets like a library catalog
+- Filter by tags, sensitivity, language, date
+- See dataset relationships (lineage graph)
+- Request access with one click
+- Download usage stats
+- Subscribe to dataset updates
+
+**Status:** Design phase, contributions welcome
+
+::: {.notes}
+Web interface will be game-changer for adoption. Visual browsing is more intuitive than YAML files. Request access workflow streamlines permissions. Make it clear this is coming but not ready yet.
+:::
+
+---
+
+## Integration Opportunities
+
+**The registry can integrate with:**
+
+- **IRB systems:** Auto-populate data use documentation
+- **Lab management systems:** Link datasets to projects
+- **Citation managers:** Generate data citations
+- **Compute clusters:** Provision data to HPC environments
+- **Notebooks:** One-click load into Jupyter/RStudio
+
+**Key:** Open standards enable integrations
+
+::: {.notes}
+Registry is extensible. Git/YAML/DVC are open standards. Easy to build integrations with institutional systems. Each integration adds value.
+:::
+
+---
+
+## Contributing to the Framework
+
+**How to get involved:**
+
+- Report bugs and feature requests (GitHub Issues)
+- Contribute documentation improvements
+- Share example workflows
+- Develop integrations
+- Help with code review
+
+**Governance:** Open to lab contributions with infrastructure admin oversight
+
+::: {.notes}
+Framework succeeds when users contribute. Lower barrier for participation. Documentation and examples are great starter contributions. Code contributions welcome but reviewed carefully.
+:::
+
+---
+
+## Key Takeaways: Advanced Topics
+
+1. **Derived datasets** should be registered for reuse
+2. **Enclave workflows** enable secure research while maintaining provenance
+3. **Access control** scales via teams and sensitivity classification
+4. **Migration** should be gradual, starting with high-value datasets
+5. **Governance** requires clear roles and review processes
+6. **Success** comes from sustainable support and continuous improvement
+
+::: {.notes}
+Recap advanced topics. These capabilities enable sophisticated use cases while maintaining the simplicity of basic workflows. Power users can do complex things; casual users aren't overwhelmed.
+:::
+
+---
+
+## Organizational Benefits
+
+**What leadership cares about:**
+
+- **Research Rigor:** Reproducibility and provenance
+- **Compliance:** Audit trails and access controls
+- **Efficiency:** Faster onboarding and reduced duplication
+- **Collaboration:** Breaking down silos
+- **Risk Management:** Proper handling of sensitive data
+- **Grant Competitiveness:** Demonstrates data management plan
+
+::: {.notes}
+Frame benefits in terms leadership understands. This isn't just a technical project - it's strategic infrastructure that supports research excellence and compliance.
+:::
+
+---
+
+## Getting Started: Action Items
+
+**For Individual Researchers:**
+
+1. Install mint and try creating a test project
+2. Register one dataset you maintain
+3. Provide feedback on what works/doesn't
+
+**For Data Managers:**
+
+1. Review migration priorities
+2. Identify early adopter projects
+3. Plan training sessions
+
+**For Leadership:**
+
+1. Allocate resources for infrastructure admin time
+2. Endorse adoption in lab policy
+3. Include in onboarding process
+
+::: {.notes}
+Clear action items for different roles. Everyone can contribute. Researchers experiment. Data managers plan. Leadership enables.
+:::
+
+---
+
+## Resources & Documentation
+
+**Official Documentation:**
+
+- mint CLI: `/mint/README.md`
+- data-registry: `/data-registry/README.md`
+- Stata integration: `/mint/stata/README.md`
+
+**Support Channels:**
+
+- GitHub Issues: Technical questions
+- Lab Slack: #data-infrastructure
+- Office Hours: Fridays 2-4pm
+
+**Examples:**
+
+- CMS Provider Data: `catalog/data/data_cms-provider-data-service.yaml`
+- Template Projects: `/mint/src/mint/files/`
+
+::: {.notes}
+Provide comprehensive resource list. Different learning styles need different materials. Point to specific examples for common use cases.
+:::
+
+---
+
+## Recap: Three-Session Series
+
+**Session 1:** Understanding why this matters
+
+- Pain points of current approach
+- Vision for better data management
+- High-level architecture
+
+**Session 2:** Learning to use the framework
+
+- Creating and discovering projects
+- Stata workflows
+- Best practices
+
+**Session 3 (Today):** Advanced capabilities
+
+- Derived datasets and enclaves
+- Governance and migration
+- Organizational adoption
+
+::: {.notes}
+Remind attendees of the journey. Session 1 motivated. Session 2 enabled. Session 3 empowered. Together they provide complete understanding.
+:::
+
+---
+
+## Final Thoughts
+
+**The framework succeeds when:**
+
+- It makes researchers more productive (not more burdened)
+- It solves real problems (not theoretical ones)
+- It grows organically (not forced adoption)
+- It evolves based on feedback (not rigid plans)
+
+**Your feedback shapes the future** - please share ideas and concerns!
+
+::: {.notes}
+End on collaborative note. This is lab infrastructure built for the lab. Success requires buy-in and participation. Feedback is genuinely welcomed and will influence priorities.
+:::
+
+---
+
+## Questions & Discussion
+
+**Discussion topics:**
+
+- What advanced capabilities matter most for your work?
+- What migration challenges do you foresee?
+- What governance concerns need addressing?
+- What integrations would add value?
+- What should we prioritize next?
+
+**Let's make this framework work for the lab!**
+
+::: {.notes}
+Open discussion for remaining time. Capture ideas and concerns. Identify champions who can help drive adoption. End with enthusiasm and clear next steps.
+:::
+
+---
+
+## Thank You!
+
+**This framework represents:**
+
+- A commitment to research excellence
+- Investment in reproducibility
+- Recognition that data management matters
+- Foundation for future collaboration
+
+**Let's build something great together.**
+
+**Next steps:** Check your email for follow-up resources and hands-on workshop times.
+
+::: {.notes}
+End on inspiring note. Thank everyone for their time and engagement. Remind them of concrete next steps. Make it clear you're available for follow-up questions.
+:::

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Registry Framework - Presentation Series</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .content {
+            padding: 60px 40px;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .intro h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .intro p {
+            color: #666;
+            font-size: 1.1em;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .sessions {
+            display: grid;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .session-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            background: white;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .session-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .session-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .session-title {
+            font-size: 1.6em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .session-subtitle {
+            font-size: 1em;
+            color: #666;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .session-details {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+            color: #888;
+        }
+
+        .session-details span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .session-description {
+            color: #555;
+            line-height: 1.7;
+            margin-top: 15px;
+        }
+
+        .session-description ul {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+
+        .session-description li {
+            margin: 5px 0;
+        }
+
+        .view-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .view-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 30px 40px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 40px 30px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .content {
+                padding: 40px 30px;
+            }
+
+            .session-details {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .session-title {
+                font-size: 1.3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Data Registry Framework</h1>
+            <p>Presentation Series</p>
+        </div>
+
+        <div class="content">
+            <div class="intro">
+                <h2>Welcome</h2>
+                <p>
+                    A comprehensive three-session series introducing the Cooper Lab's data registry framework,
+                    including mintd CLI, mint-registry, and best practices for reproducible research data management.
+                </p>
+            </div>
+
+            <div class="sessions">
+                <a href="session1-concepts.html" class="session-card">
+                    <span class="session-number">Session 1</span>
+                    <h3 class="session-title">Concepts & Motivation</h3>
+                    <div class="session-details">
+                        <span>⏱️ 45-60 minutes</span>
+                        <span>👥 All lab members</span>
+                    </div>
+                    <div class="session-description">
+                        <p><strong>Goal:</strong> Understand the why and what</p>
+                        <ul>
+                            <li>Pain points of current ad-hoc data management</li>
+                            <li>Benefits of centralized registry approach</li>
+                            <li>High-level architecture overview</li>
+                            <li>Framework philosophy and vision</li>
+                        </ul>
+                    </div>
+                    <span class="view-button">View Presentation →</span>
+                </a>
+
+                <a href="session2-usage.html" class="session-card">
+                    <span class="session-number">Session 2</span>
+                    <h3 class="session-title">Using the Framework with Stata</h3>
+                    <div class="session-details">
+                        <span>⏱️ 60-90 minutes</span>
+                        <span>👥 Researchers who will use the framework</span>
+                    </div>
+                    <div class="session-description">
+                        <p><strong>Goal:</strong> Learn practical workflows</p>
+                        <ul>
+                            <li>Creating data projects with mintd</li>
+                            <li>Understanding generated project structure</li>
+                            <li>Standard workflow: ingest → clean → validate</li>
+                            <li>Version control with Git and DVC</li>
+                            <li>Discovering and using datasets from catalog</li>
+                            <li>Live demonstrations and hands-on exercises</li>
+                        </ul>
+                    </div>
+                    <span class="view-button">View Presentation →</span>
+                </a>
+
+                <a href="session3-advanced.html" class="session-card">
+                    <span class="session-number">Session 3</span>
+                    <h3 class="session-title">Advanced Topics & Adoption</h3>
+                    <div class="session-details">
+                        <span>⏱️ 60-90 minutes</span>
+                        <span>👥 Data managers, infrastructure admins, power users</span>
+                    </div>
+                    <div class="session-description">
+                        <p><strong>Goal:</strong> Master advanced capabilities</p>
+                        <ul>
+                            <li>Publishing derived datasets</li>
+                            <li>Enclave workflows for sensitive data</li>
+                            <li>Collaboration patterns and access control</li>
+                            <li>Migration strategies for existing projects</li>
+                            <li>Governance and organizational adoption</li>
+                            <li>Future roadmap</li>
+                        </ul>
+                    </div>
+                    <span class="view-button">View Presentation →</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>Cooper Lab</strong></p>
+            <p>Data Infrastructure Team</p>
+            <p style="margin-top: 15px;">
+                <a href="https://github.com/Cooper-lab/mint" target="_blank">mintd Documentation</a> •
+                <a href="https://cooper-lab.github.io/mint/" target="_blank">Official Docs</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

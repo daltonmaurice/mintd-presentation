@@ -1,0 +1,268 @@
+/*-- scss:defaults --*/
+
+// Color palette
+$primary-color: #2c3e50;
+$secondary-color: #3498db;
+$accent-color: #e74c3c;
+$success-color: #27ae60;
+$warning-color: #f39c12;
+$light-gray: #ecf0f1;
+$dark-gray: #34495e;
+
+// Typography
+$font-family-sans-serif: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-family-monospace: "Fira Code", "Source Code Pro", Consolas, Monaco, monospace;
+$presentation-heading-color: $primary-color;
+$presentation-font-size-root: 36px;
+
+// Layout
+$presentation-line-height: 1.6;
+
+/*-- scss:rules --*/
+
+// Overall presentation styling
+.reveal {
+  font-family: $font-family-sans-serif;
+  color: $dark-gray;
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4 {
+  color: $presentation-heading-color;
+  font-weight: 600;
+  margin-bottom: 0.5em;
+}
+
+.reveal h2 {
+  border-bottom: 3px solid $secondary-color;
+  padding-bottom: 0.3em;
+  margin-top: 0.5em;
+}
+
+// Code blocks
+.reveal pre {
+  background-color: #f8f9fa;
+  border-left: 4px solid $secondary-color;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.reveal code {
+  font-family: $font-family-monospace;
+  background-color: #f8f9fa;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+}
+
+.reveal pre code {
+  background-color: transparent;
+  padding: 0;
+  font-size: 0.8em;
+  line-height: 1.5;
+}
+
+// Lists
+.reveal ul,
+.reveal ol {
+  margin: 0.5em 0 0.5em 1em;
+}
+
+.reveal li {
+  margin-bottom: 0.5em;
+}
+
+// Emphasis and checkmarks
+.reveal strong {
+  color: $primary-color;
+  font-weight: 600;
+}
+
+.reveal em {
+  color: $secondary-color;
+}
+
+// Checkmark styling for benefits
+.reveal li:has(::before) {
+  list-style: none;
+}
+
+// Tables
+.reveal table {
+  border-collapse: collapse;
+  margin: 1em auto;
+}
+
+.reveal th {
+  background-color: $secondary-color;
+  color: white;
+  font-weight: 600;
+  padding: 0.75em;
+}
+
+.reveal td {
+  padding: 0.5em 0.75em;
+  border-bottom: 1px solid $light-gray;
+}
+
+.reveal tr:hover {
+  background-color: #f8f9fa;
+}
+
+// Columns
+.reveal .columns {
+  display: flex;
+  gap: 2em;
+  align-items: flex-start;
+}
+
+.reveal .column {
+  flex: 1;
+}
+
+// Smaller text slides
+.reveal .smaller {
+  font-size: 0.85em;
+}
+
+.reveal .smaller li {
+  margin-bottom: 0.3em;
+}
+
+// Mermaid diagrams
+.reveal .mermaid {
+  background-color: white;
+  padding: 1em;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+// Notes sections (speaker notes styling)
+.reveal .notes {
+  background-color: #fffbf0;
+  border-left: 4px solid $warning-color;
+  padding: 1em;
+  margin: 1em 0;
+  font-size: 0.8em;
+  border-radius: 4px;
+}
+
+// Blockquotes
+.reveal blockquote {
+  background-color: $light-gray;
+  border-left: 5px solid $secondary-color;
+  padding: 1em 1.5em;
+  margin: 1em 0;
+  font-style: italic;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+// Links
+.reveal a {
+  color: $secondary-color;
+  text-decoration: none;
+  border-bottom: 1px dotted $secondary-color;
+  transition: all 0.3s ease;
+}
+
+.reveal a:hover {
+  color: darken($secondary-color, 15%);
+  border-bottom: 1px solid darken($secondary-color, 15%);
+}
+
+// Slide numbers
+.reveal .slide-number {
+  background-color: rgba($secondary-color, 0.8);
+  color: white;
+  padding: 0.3em 0.6em;
+  border-radius: 4px;
+  font-size: 0.6em;
+}
+
+// Progress bar
+.reveal .progress {
+  background-color: rgba($light-gray, 0.5);
+  height: 4px;
+}
+
+.reveal .progress span {
+  background-color: $secondary-color;
+}
+
+// Title slide
+.reveal .title-slide {
+  text-align: center;
+}
+
+.reveal .title-slide h1 {
+  font-size: 2.5em;
+  color: $primary-color;
+  border-bottom: none;
+  margin-bottom: 0.3em;
+}
+
+.reveal .title-slide h2 {
+  font-size: 1.5em;
+  color: $secondary-color;
+  border-bottom: none;
+  font-weight: 400;
+  margin-bottom: 2em;
+}
+
+// Special emphasis boxes
+.reveal .callout {
+  background-color: lighten($secondary-color, 45%);
+  border-left: 5px solid $secondary-color;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 4px;
+}
+
+.reveal .callout-warning {
+  background-color: lighten($warning-color, 40%);
+  border-left: 5px solid $warning-color;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 4px;
+}
+
+.reveal .callout-success {
+  background-color: lighten($success-color, 50%);
+  border-left: 5px solid $success-color;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 4px;
+}
+
+// YAML and JSON highlighting
+.reveal .language-yaml,
+.reveal .language-json {
+  font-size: 0.7em;
+}
+
+// Stata code highlighting
+.reveal .language-stata {
+  font-size: 0.75em;
+}
+
+// Background for certain slides
+.reveal .slide-background {
+  background-color: white;
+}
+
+// Highlight important items
+.reveal .highlight {
+  background-color: lighten($warning-color, 35%);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+}
+
+// Footer customization
+.reveal .footer {
+  font-size: 0.5em;
+  color: lighten($dark-gray, 30%);
+}

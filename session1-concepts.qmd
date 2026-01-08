@@ -1,0 +1,417 @@
+---
+title: "Data Registry Framework"
+subtitle: "Session 1: Concepts & Motivation"
+author: "Maurice dalton"
+format:
+  revealjs:
+    theme: [default, custom.scss]
+    slide-number: true
+    chalkboard: true
+    preview-links: auto
+    code-line-numbers: false
+    highlight-style: github
+---
+
+## Current Challenges {.smaller}
+
+:::: {.columns}
+::: {.column width="50%"}
+**Common situations:**
+
+- "Where is the latest version of that dataset?"
+- Multiple copies in different locations
+- Unclear documentation or naming
+- Asking colleagues for data locations
+- Manual version tracking
+:::
+
+::: {.column width="50%"}
+**Areas for improvement:**
+
+- Time spent locating datasets
+- Ensuring everyone uses the same version
+- Recreating analyses from months ago
+- Onboarding new team members
+- Tracking data provenance for compliance
+:::
+::::
+
+::: {.notes}
+Acknowledge current challenges without being overly dramatic. These are real issues that can be improved. The framework provides better tools for data management.
+:::
+
+---
+
+## Opportunities for Better Data Management {.smaller}
+
+**Questions the framework addresses:**
+
+- How do we make datasets easy to find?
+- How do we track where data came from and how it was processed?
+- How do we ensure analyses are reproducible?
+- How do we streamline onboarding?
+- How do we manage access to sensitive data properly?
+
+**Goal:** Provide better tools that make good practices easy.
+
+::: {.notes}
+Frame this as opportunities and improvements rather than crises. The framework provides infrastructure to support research best practices.
+:::
+
+---
+
+## What If We Could... {.smaller}
+
+✓ **Find any dataset in seconds** with searchable metadata
+
+✓ **Know exactly where data came from** and how it was processed
+
+✓ **Reproduce any analysis** from years ago automatically
+
+✓ **Onboard new researchers in days** not months
+
+✓ **Handle sensitive data properly** with built-in access controls
+
+✓ **Share datasets with collaborators** without email attachments
+
+::: {.notes}
+Transition to the vision. Each of these benefits directly addresses a pain point from the previous slides. The framework makes all of this possible.
+:::
+
+---
+
+## The Solution: Data Registry Framework {.smaller}
+
+**Key principle:** Make the right thing easy.
+
+**Three simple pieces that work together:**
+
+1. **Centralized Catalog** - One place to register and find all datasets
+2. **Standardized Projects** - Consistent structure everyone understands
+3. **Automated Workflows** - Version control and provenance tracking handled for you
+
+**The framework helps with setup:**
+
+- Configures S3 bucket access for data storage
+- Sets up DVC (Data Version Control) automatically
+- Manages credentials securely
+- Creates standard project structure
+
+
+::: {.notes}
+Keep the architecture simple at this level. Emphasize that the framework handles technical setup like S3 buckets and DVC configuration, so users don't need to figure this out themselves.
+:::
+
+---
+
+## Three Project Types {.smaller}
+
+**Data Products** - Datasets with versioning and metadata
+
+- Example: `data_cms-provider-data-service` - CMS provider reference data
+- Example: `data_cms-impactfile` - Medicare claims for analysis
+- Contains: raw data, cleaning scripts, processed outputs
+
+**Analysis Projects** - Research projects that use data products
+
+- Example: `prj_price-quality` - Analysis using CMS data
+- Example: `prj_mergerheterogeneity` - ML model using claims
+- Contains: analysis code, notebooks, results, publications
+
+**Infrastructure** - Shared tools and utilities
+
+- Example: `infra_provider-xw` - Reusable CMS crosswalks
+- Contains: libraries, packages, documentation
+
+::: {.notes}
+Show concrete examples of each type. Data products are datasets that multiple projects use. Analysis projects are specific research questions. Infrastructure is shared code that multiple projects need. This separation keeps things organized and enables reuse.
+:::
+
+---
+
+## How It Works: The Big Picture {.smaller}
+
+```{mermaid}
+%%| fig-width: 8
+flowchart LR
+    A[Create Project] --> B[Register in Catalog]
+    B --> C[Searchable Metadata]
+    C --> D[Access Controls]
+    D --> E[Version Controlled]
+
+    F[Find Data?] --> G[Search Catalog]
+    G --> H[Discover Dataset]
+    H --> I[Access & Use]
+
+    style A fill:#e1f5ff
+    style B fill:#ffe1e1
+    style G fill:#e1ffe1
+    style I fill:#fff5e1
+```
+
+::: {.notes}
+Walk through the complete lifecycle: creation → registration → discovery → use. Emphasize that this is automated - researchers don't manually manage most of this.
+:::
+
+---
+
+## Benefit 1: Findability {.smaller}
+
+**Today (GitHub Search):**
+
+- Search across all registered datasets
+- Filter by tags, language, sensitivity level
+- See descriptions, maintainers, last updated
+
+**Coming Soon (Web Interface):**
+
+- Browse datasets like a library catalog
+- Interactive filters and visualizations
+- Usage statistics and popular datasets
+
+**vs. Dropbox:** "Try searching subfolders and hope for the best"
+
+::: {.notes}
+Emphasize current capabilities while showing future vision. GitHub search works now and is already much better than folder browsing. The website will make it even easier.
+:::
+
+---
+
+## Benefit 2: Reproducibility {.smaller}
+
+**Every dataset includes:**
+
+- **Provenance:** Where did the raw data come from?
+- **Transformations:** What processing was applied?
+- **Versions:** Git tracks code changes, DVC tracks data changes
+- **Dependencies:** What other datasets were used?
+- **Environment:** Document software versions and requirements
+
+**Result:** Reproduce any analysis, even years later.
+
+::: {.notes}
+This is critical for research rigor. Journals and funders increasingly require reproducibility. The framework provides infrastructure for tracking all these elements. Environment tracking (software versions) can be documented in requirements files that Git tracks - considering ways to make this more automatic in the future.
+:::
+
+---
+
+## Example: CMS Provider Data {.smaller}
+
+```yaml
+project:
+  name: cms-provider-data-service
+  type: data
+
+metadata:
+  description: CMS Provider Data Service
+  tags: [cms, provider, ccn, npi, impact files]
+  language: stata
+
+ownership:
+  maintainers:
+    - name: Maurice Dalton
+      email: maurice.dalton@yale.edu
+
+access_control:
+  teams:
+    - team: lab-researchers
+      permission: read-write
+    - team: public
+      permission: read
+```
+
+::: {.notes}
+Show real example from your lab. Point out how metadata makes it discoverable (tags), ownership is clear, and access control is explicit. This YAML file is in the catalog and searchable.
+:::
+
+---
+
+## Benefit 3: Access Control {.smaller}
+
+**Before:** "Can you add me to the Dropbox folder?"
+
+**After:** Access control defined in catalog, automatically enforced
+
+- **Team-based permissions:** lab-researchers, infrastructure-admins, collaborators
+- **Individual grants** for specific cases
+- **Automatic sync** to GitHub repositories and S3 storage
+- **Audit trail:** Git history shows who changed what
+
+**Result:** Secure by default, compliant with data use agreements.
+
+::: {.notes}
+Access control is crucial for PHI/PII and data use agreements. The framework enforces policies automatically rather than relying on manual Dropbox folder sharing.
+:::
+
+---
+
+## Benefit 4: Easy Onboarding {.smaller}
+
+**New researcher joins the lab:**
+
+1. Get added to `lab-researchers` GitHub team
+2. Run one command to see all available datasets
+3. Access documentation automatically
+4. Start working in hours, not weeks
+
+**vs. Current:** "Here are 47 Dropbox links, good luck figuring out what's what"
+
+::: {.notes}
+Onboarding efficiency is a huge win. Junior researchers can be productive immediately because everything is documented and discoverable. No need for extensive institutional knowledge.
+:::
+
+---
+
+## Benefit 5: Collaboration {.smaller}
+
+**Internal collaboration:**
+
+- All team members see the same catalog
+- Share derived datasets by registering them
+- No emailing files back and forth
+
+**External collaboration:**
+
+- Mirror repositories to public GitHub for collaborators
+- Access control ensures proper permissions
+- Collaborators get same reproducible workflows
+
+::: {.notes}
+Breaking down silos. Different research projects can build on each other's work. External collaborators can access exactly what they need without full lab access.
+:::
+
+---
+
+## Benefit 6: Enclave Support {.smaller}
+
+**For highly sensitive data (FISMA, PHI):**
+
+- Track provenance of data brought INTO secure enclaves
+- Package datasets with cryptographic verification
+- Manifest tracks what data is approved for transfer
+- Audit trail for compliance
+
+**Use case:** Working in environments where you can't directly download from internet.
+
+::: {.notes}
+This is a planned implementation that's partially ready. Shows the framework can handle even the most restrictive data environments. Important for expanding research to sensitive datasets.
+:::
+
+---
+
+## Architecture Overview
+
+```{mermaid}
+%%| fig-width: 10
+flowchart LR
+    A[Researcher] -->|Creates Project| B[Local Project]
+    B -->|Registers| C[Central Catalog]
+    C -->|Enforces| D[Access Controls]
+    C -->|Tracked in| E[Git Repository]
+    B -->|Data Versioned| F[Cloud Storage S3]
+
+    G[Another Researcher] -->|Searches| C
+    G -->|Discovers| H[Dataset]
+    H -->|Grants Access| D
+    D -->|Downloads| F
+
+    style C fill:#ffe1e1
+    style F fill:#e1f5ff
+    style D fill:#ffe1ff
+```
+
+::: {.notes}
+Simple architecture diagram. Focus on user interactions, not implementation. Show how one researcher's work becomes discoverable and accessible to others through the catalog.
+:::
+
+---
+
+## What Makes This Different {.smaller}
+
+**Not just a shared folder:**
+
+- Metadata makes data findable
+- Provenance tracks data lineage
+- Versioning enables time travel
+- Automation reduces burden
+
+**Not just documentation:**
+
+- Machine-readable metadata
+- Enforced access controls
+- Automatic permission sync
+- Living documentation that stays current
+
+::: {.notes}
+Distinguish from alternatives researchers might propose. This is purpose-built for research data management, not general file sharing or manual documentation.
+:::
+
+---
+
+## Real-World Workflow Preview {.smaller}
+
+**Session 2 will cover this in detail, but here's the essence:**
+
+1. Researcher runs simple command: `mint create data --name medicare_claims --lang stata`
+2. Standardized project structure created automatically
+3. Git and data versioning configured
+4. Project registered in catalog
+5. Team can immediately discover and access it
+
+**That's it.** The framework handles the complexity.
+
+::: {.notes}
+Give a taste of how easy it is to use. Don't go into technical details - that's Session 2. Just show that it's simple and fast.
+:::
+
+---
+
+## Sessions Overview {.smaller}
+
+**Session 1 (Today):** Understanding the why and the what
+
+**Session 2:** Hands-on usage with Stata
+
+- Creating data projects
+- Discovering datasets
+- Working with versioned data
+- Live demonstrations
+
+**Session 3:** Advanced topics
+
+- Publishing derived datasets
+- Enclave workflows
+- Collaboration patterns
+- Governance and next steps
+
+::: {.notes}
+Set expectations for the series. Today was concepts and motivation. Next session is practical usage. Final session is advanced scenarios and organizational adoption.
+:::
+
+---
+
+## Key Takeaways {.smaller}
+
+1. **Current ad-hoc approaches waste time and threaten reproducibility**
+2. **Centralized catalog makes data findable and managed**
+3. **Automated workflows reduce burden on researchers**
+4. **Access control and provenance built in, not bolted on**
+5. **Framework enables research rigor at scale**
+
+**Next session:** See it in action with Stata workflows
+
+::: {.notes}
+Reinforce the main messages. The framework solves real problems, makes researchers more productive, and improves research quality. Transition to hands-on Session 2.
+:::
+
+---
+
+## Questions?
+
+**Discussion points:**
+
+- What datasets would you want to register first?
+- What current pain points resonate most?
+- What concerns do you have about adoption?
+
+**Next:** Session 2 will include live demos and hands-on examples

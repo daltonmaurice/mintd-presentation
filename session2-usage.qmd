@@ -1,0 +1,754 @@
+---
+title: "Data Registry Framework"
+subtitle: "Session 2: Using the Framework with Stata"
+author: "Cooper Lab"
+format:
+  revealjs:
+    theme: [default, custom.scss]
+    slide-number: true
+    chalkboard: true
+    preview-links: auto
+    code-line-numbers: false
+    highlight-style: github
+---
+
+## Session 2 Goals {.smaller}
+
+**What you'll learn today:**
+
+1. How to create a new data project with Stata
+2. Understanding the generated project structure
+3. Discovering existing datasets in the catalog
+4. Working with version-controlled data
+5. Best practices for reproducible workflows
+
+**Format:** Mix of explanation and live demonstrations
+
+::: {.notes}
+Set clear expectations. This session is hands-on and practical. We have backup screenshots for all demos in case of technical issues.
+:::
+
+---
+
+## Prerequisites {.smaller}
+
+**What you need installed:**
+
+- Stata 16+ (with Python support)
+- Python 3.9+ (usually already installed on Mac/Linux)
+- Git (for version control)
+- mint CLI tool
+
+**One-time setup:**
+
+```bash
+pip install mint
+mint config setup
+```
+
+**The setup wizard helps you configure:**
+
+- S3 bucket access credentials
+- DVC (Data Version Control) settings
+- GitHub integration
+- Default metadata (your name, organization)
+
+We'll walk through setup if you haven't done it yet.
+
+::: {.notes}
+Don't assume everyone is set up. Offer to help with installation after the session. Emphasize that mint config setup is interactive and guides you through all the technical configuration.
+:::
+
+---
+
+## Creating Your First Data Project {.smaller}
+
+**Two ways to use mint with Stata:**
+
+**Option 1: From command line**
+```bash
+mint create data --name healthcare_analysis --lang stata
+```
+
+**Option 2: From within Stata**
+```stata
+mint, type(data) name(healthcare_analysis) lang(stata)
+```
+
+Both do exactly the same thing. Use whichever is more comfortable.
+
+::: {.notes}
+Show both options. Many Stata users prefer staying in Stata console. The Stata wrapper is a thin layer that calls the Python CLI.
+:::
+
+---
+
+## Live Demo: Creating a Data Project {.smaller}
+
+**Let's create a real project together:**
+
+```bash
+mint create data --name medicare_claims --lang stata --register
+```
+
+**What the --register flag does:**
+
+- Creates the project locally
+- Automatically submits registration to catalog
+- Returns a Pull Request URL for tracking
+- Makes project discoverable once PR is merged
+
+::: {.notes}
+LIVE DEMO TIME. Create a project with --register flag. Show the output including PR URL. Keep terminal window visible so everyone can see the process. If demo fails, have backup screenshots ready.
+:::
+
+---
+
+## What Gets Created: Directory Structure {.smaller}
+
+```
+data_medicare_claims/
+├── README.md                 # Project documentation
+├── metadata.json             # Searchable metadata
+├── .git/                     # Version control
+├── .dvc/                     # Data version control
+├── data/
+│   ├── raw/                  # Original untouched data
+│   ├── interim/              # Intermediate processing
+│   └── processed/            # Final analysis-ready data
+├── src/
+│   ├── _mint_utils.do        # Utility functions
+│   ├── ingest.do             # Data ingestion
+│   ├── clean.do              # Data cleaning
+│   └── validate.do           # Data validation
+└── notebooks/                # Exploratory analysis
+```
+
+::: {.notes}
+Walk through each directory. Emphasize the separation of raw/interim/processed data. Raw data is sacred - never modify it. All transformations in src/ scripts.
+:::
+
+---
+
+## Understanding metadata.json {.smaller}
+
+```json
+{
+  "project": {
+    "name": "medicare_claims",
+    "type": "data",
+    "language": "stata"
+  },
+  "metadata": {
+    "description": "Medicare claims data analysis",
+    "tags": ["medicare", "claims", "cms"],
+    "sensitivity": "restricted"
+  },
+  "ownership": {
+    "created_by": "Your Name",
+    "maintainers": [
+      {
+        "name": "Your Name",
+        "email": "you@yale.edu",
+        "role": "lead"
+      }
+    ]
+  }
+}
+```
+
+::: {.notes}
+This file makes your project discoverable. Tags enable search. Sensitivity classification drives access controls. You can edit this file as needed.
+:::
+
+---
+
+## Stata Utility Functions: _mint_utils.do {.smaller}
+
+**Automatically generated helper functions:**
+
+```stata
+* Logging functions
+mint_log_info "Starting data ingestion"
+mint_log_warning "Missing values detected in column X"
+mint_log_error "Validation failed: check data quality"
+
+* Path helpers
+local raw_dir = mint_get_path("raw")
+local processed_dir = mint_get_path("processed")
+
+* Schema validation
+mint_validate_schema using "data/raw/claims.dta", ///
+    schema("schemas/claims.json")
+```
+
+**Benefit:** Consistent logging and validation across all projects.
+
+::: {.notes}
+These utilities make Stata scripts more robust. Logging helps with debugging. Path helpers make code portable. Schema validation catches data issues early.
+:::
+
+---
+
+## The Standard Workflow: Ingest {.smaller}
+
+**src/ingest.do** - Bring data into the project
+
+```stata
+/*
+Purpose: Ingest raw Medicare claims data
+Input: External data source
+Output: data/raw/claims.dta
+*/
+
+version 16
+set more off
+
+// Load utilities
+do "_mint_utils.do"
+
+mint_log_info "Starting data ingestion"
+
+// Import from external source
+local source = "$MEDICARE_DATA_DIR/claims_2023.csv"
+import delimited "`source'", clear
+
+// Save to raw directory
+local raw_dir = mint_get_path("raw")
+save "`raw_dir'/claims.dta", replace
+
+mint_log_info "Ingestion complete: `=_N' observations"
+```
+
+::: {.notes}
+Ingest is just importing and saving to raw/. Keep it simple - no transformations here. The goal is to preserve original data exactly as received.
+:::
+
+---
+
+## The Standard Workflow: Clean {.smaller}
+
+**src/clean.do** - Transform raw data into analysis-ready format
+
+```stata
+/*
+Purpose: Clean and standardize Medicare claims
+Input: data/raw/claims.dta
+Output: data/processed/claims_clean.dta
+*/
+
+version 16
+set more off
+do "_mint_utils.do"
+
+mint_log_info "Starting data cleaning"
+
+// Load raw data
+local raw_dir = mint_get_path("raw")
+use "`raw_dir'/claims.dta", clear
+
+// Data transformations
+drop if missing(claim_id)
+rename claim_amt claim_amount
+gen claim_year = year(claim_date)
+
+// Validate expected structure
+assert !missing(claim_id)
+assert claim_amount > 0
+
+// Save processed data
+local proc_dir = mint_get_path("processed")
+save "`proc_dir'/claims_clean.dta", replace
+
+mint_log_info "Cleaning complete: `=_N' observations"
+```
+
+::: {.notes}
+Clean.do contains all transformations. Use assertions to catch data quality issues. Raw data stays untouched - all changes are in processed/.
+:::
+
+---
+
+## The Standard Workflow: Validate {.smaller}
+
+**src/validate.do** - Check data quality and schema
+
+```stata
+/*
+Purpose: Validate processed data meets requirements
+Input: data/processed/claims_clean.dta
+Output: Validation report
+*/
+
+version 16
+set more off
+do "_mint_utils.do"
+
+mint_log_info "Starting data validation"
+
+local proc_dir = mint_get_path("processed")
+use "`proc_dir'/claims_clean.dta", clear
+
+// Check for required columns
+capture confirm variable claim_id claim_amount claim_year
+if _rc != 0 {
+    mint_log_error "Required columns missing"
+    exit 1
+}
+
+// Check data quality
+count if missing(claim_amount)
+if r(N) > 0 {
+    mint_log_warning "`r(N)' rows with missing amounts"
+}
+
+// Summary stats for documentation
+summarize claim_amount
+mint_log_info "Validation passed"
+```
+
+::: {.notes}
+Validation catches issues before analysis. These checks document assumptions about data structure. Failed validation should stop the pipeline.
+:::
+
+---
+
+## Version Control with DVC {.smaller}
+
+**Problem:** Git is great for code, bad for large data files
+
+**Solution:** DVC (Data Version Control)
+
+- Tracks data files in cloud storage (S3)
+- Git tracks small pointer files instead
+- Download data on demand
+- Version data just like code
+
+**Good news:** mint configures DVC automatically
+
+- Sets up S3 bucket connection
+- Configures credentials securely
+- Creates .dvc directory and config
+- You just use the commands
+
+**Commands you'll use:**
+
+```bash
+dvc add data/raw/claims.csv       # Track a data file
+dvc push                          # Upload to S3
+dvc pull                          # Download from S3
+```
+
+::: {.notes}
+DVC solves the "how do we version large datasets" problem. Emphasize that mint handles all the setup - users don't need to configure S3 buckets manually. Data files live in S3, git tracks metadata. This keeps repositories small while maintaining full version history.
+:::
+
+---
+
+## Live Demo: Complete Workflow {.smaller}
+
+**Let's walk through the full pipeline:**
+
+1. Create project structure
+2. Add raw data file
+3. Run ingest.do
+4. Run clean.do
+5. Run validate.do
+6. Track data with DVC
+7. Commit changes to Git
+
+**Follow along or watch - we'll have hands-on time later**
+
+::: {.notes}
+LIVE DEMO: Walk through complete workflow from start to finish. Show terminal commands and Stata console. Emphasize how automated the process is. Have backup screenshots in case of issues.
+:::
+
+---
+
+## Discovering Existing Datasets {.smaller}
+
+**How to find data in the catalog:**
+
+**Method 1: GitHub Search**
+
+1. Go to data-registry repository
+2. Search for keywords in catalog/ folder
+3. Filter by tags, language, or owner
+
+**Method 2: Command Line**
+
+```bash
+# Clone the catalog locally
+git clone git@github.com:cooper-lab-yale/data-registry.git
+
+# Search YAML files
+grep -r "medicare" data-registry/catalog/
+```
+
+::: {.notes}
+Show both methods. GitHub search is easier for quick lookups. Local clone is better for scripting or complex searches. Coming soon: web interface will make this even easier.
+:::
+
+---
+
+## Live Demo: Finding CMS Provider Data {.smaller}
+
+**Let's find the CMS Provider dataset:**
+
+1. Navigate to data-registry on GitHub
+2. Search for "cms provider"
+3. Examine the catalog entry
+4. Check access permissions
+5. Note the repository URL
+6. Clone if we have access
+
+::: {.notes}
+LIVE DEMO: Show actual search in GitHub. Open the data_cms-provider-data-service.yaml file. Walk through the metadata - description, tags, maintainers, access control. Show how to check if you have access.
+:::
+
+---
+
+## Understanding Catalog Entries {.smaller}
+
+**When you find a dataset, look for:**
+
+- **Description:** What is this dataset?
+- **Tags:** medicare, cms, provider, claims, etc.
+- **Maintainer:** Who to contact with questions?
+- **Access Control:** Can you access it?
+- **Repository URL:** Where is the actual data?
+- **Storage:** S3 bucket information
+- **Last Updated:** Is this current?
+
+**Red flags:** No maintainer, unclear description, outdated
+
+::: {.notes}
+Teach researchers how to evaluate datasets. Good metadata means trustworthy data. Missing information suggests the dataset may not be well maintained.
+:::
+
+---
+
+## Using a Dataset from the Catalog {.smaller}
+
+**Once you find a dataset you need:**
+
+1. Check access permissions in catalog YAML
+2. Clone the repository: `git clone <repo-url>`
+3. Pull data files: `dvc pull`
+4. Read the README for usage instructions
+5. Reference the dataset in your analysis
+
+**Best practice:** Don't copy data - reference the canonical version
+
+::: {.notes}
+Emphasize referencing vs copying. If everyone has their own copy, you lose consistency and waste storage. DVC makes it easy to reference the original.
+:::
+
+---
+
+## Registering Your Project {.smaller}
+
+**If you didn't use --register when creating:**
+
+```bash
+cd data_medicare_claims
+mint registry register
+```
+
+**What happens:**
+
+1. Reads your metadata.json
+2. Generates catalog YAML entry
+3. Creates Pull Request in data-registry
+4. Returns PR URL for tracking
+
+**After PR is merged:**
+
+- Project appears in catalog
+- Access controls are enforced
+- Team can discover your dataset
+
+::: {.notes}
+Registration can happen later if you forget the --register flag. The process is the same. Merging the PR is when the project becomes "official" and discoverable.
+:::
+
+---
+
+## Common Workflows: Starting New Analysis {.smaller}
+
+**Scenario: I need to analyze CMS provider data**
+
+```stata
+* 1. Find dataset in catalog (GitHub search)
+* 2. Clone the repository
+! git clone git@github.com:cooper-lab-yale/data_cms-provider-data-service.git
+
+* 3. Pull the actual data
+! cd data_cms-provider-data-service
+! dvc pull
+
+* 4. Load into Stata
+use "data/processed/cms_providers_clean.dta", clear
+
+* 5. Start analysis
+summarize provider_count
+```
+
+::: {.notes}
+Show complete realistic workflow. Researcher finds data, clones it, pulls data files, loads into Stata. The process is straightforward once you know the pattern.
+:::
+
+---
+
+## Common Workflows: Updating a Dataset {.smaller}
+
+**Scenario: New CMS data is released, need to update**
+
+```bash
+cd data_cms-provider-data-service
+
+# Run the pipeline again with new source data
+stata-mp -b do src/ingest.do
+stata-mp -b do src/clean.do
+stata-mp -b do src/validate.do
+
+# Track updated data
+dvc add data/processed/cms_providers_clean.dta
+dvc push
+
+# Commit changes
+git add .
+git commit -m "Update CMS provider data to 2024 Q4"
+git push
+```
+
+::: {.notes}
+Reproducible updates. Run the same scripts with new source data. DVC tracks the new version. Git tracks what changed. Everyone with access can pull the update.
+:::
+
+---
+
+## Best Practices: Documentation {.smaller}
+
+**Good README.md includes:**
+
+- Purpose of the dataset
+- Data sources and collection methods
+- Processing steps applied
+- Data dictionary (variable definitions)
+- Known limitations or issues
+- Update frequency
+- Contact information
+
+**Templates are provided** - just fill in the details!
+
+::: {.notes}
+Good documentation is crucial for reuse. Future you (6 months from now) will thank present you. The template makes it easy to include all important information.
+:::
+
+---
+
+## Best Practices: Data Organization {.smaller}
+
+**DO:**
+
+- Keep raw data untouched
+- Document all transformations
+- Use descriptive variable names
+- Include data validation checks
+- Version data with DVC
+
+**DON'T:**
+
+- Manually edit raw files
+- Store passwords in scripts
+- Hard-code file paths
+- Skip documentation
+- Copy datasets between projects
+
+::: {.notes}
+Reinforce good habits. Raw data is sacred. Transformations are reproducible. Documentation is not optional. Version control catches mistakes.
+:::
+
+---
+
+## Best Practices: Collaboration {.smaller}
+
+**When working with team members:**
+
+- Register your dataset so others can find it
+- Use descriptive tags in metadata
+- Respond to issues/questions on GitHub
+- Document breaking changes
+- Follow the lab's naming conventions
+
+**Communication:** GitHub Issues are better than email for data questions
+
+::: {.notes}
+Collaboration works when everyone follows conventions. GitHub Issues create a searchable history of questions and solutions. Email disappears into inboxes.
+:::
+
+---
+
+## Troubleshooting: Common Issues {.smaller}
+
+**"DVC pull failed"**
+
+- Run setup wizard again: `mint config setup`
+- The wizard will help you configure S3 credentials securely
+- Or set credentials manually: `mint config setup --set-credentials`
+
+**"Registration failed"**
+
+- Ensure GitHub SSH key is configured
+- Check GitHub CLI is authenticated: `gh auth login`
+
+**"Can't find dataset"**
+
+- Check catalog/ folder directly
+- Verify spelling and tags
+- Ask maintainer for help
+
+::: {.notes}
+Document common failure modes. Most issues are configuration related. Emphasize that the setup wizard can be run again at any time to fix credential issues. S3 credentials and GitHub authentication are the usual suspects. Have links to detailed troubleshooting docs ready.
+:::
+
+---
+
+## Hands-On Exercise (Optional) {.smaller}
+
+**If we have time, try this yourself:**
+
+1. Create a small test project
+2. Add a simple CSV file to data/raw/
+3. Write a basic clean.do script
+4. Track the data with DVC
+5. Register the project
+
+**Helpers will circulate** - raise your hand if stuck!
+
+::: {.notes}
+Only do this if session time allows. Otherwise, offer office hours or follow-up workshop. Hands-on practice solidifies understanding but takes time.
+:::
+
+---
+
+## Real Example: Medicare Claims Pipeline {.smaller}
+
+**Structure:**
+
+```
+data_medicare_claims/
+├── src/
+│   ├── ingest.do          # Import from CMS
+│   ├── clean.do           # Standardize fields
+│   ├── merge.do           # Join with provider data
+│   ├── validate.do        # Check completeness
+│   └── analyze.do         # Summary statistics
+├── data/
+│   ├── raw/claims_*.csv   # Original CMS files
+│   └── processed/         # Analysis-ready data
+└── notebooks/
+    └── exploratory.do      # Ad-hoc analysis
+```
+
+**Result:** Reproducible pipeline from raw CMS data to analysis
+
+::: {.notes}
+Show realistic complexity. Most projects have multiple processing steps. The structure accommodates this naturally. Notebooks for exploration, src/ for production pipeline.
+:::
+
+---
+
+## What We've Covered {.smaller}
+
+✓ Creating data projects with mint
+
+✓ Understanding generated structure
+
+✓ Standard workflow: ingest → clean → validate
+
+✓ Version control with Git and DVC
+
+✓ Discovering datasets in the catalog
+
+✓ Registering projects for discoverability
+
+✓ Best practices for reproducibility
+
+::: {.notes}
+Recap the session. Researchers should now feel comfortable creating and using projects. Next session covers advanced topics for power users.
+:::
+
+---
+
+## Preview: Session 3 {.smaller}
+
+**Advanced topics coming next:**
+
+- Publishing derived datasets
+- Enclave workflows for restricted data
+- Collaboration patterns
+- Governance and access control
+- Migration strategies
+- Adoption roadmap
+
+**Target audience:** Data managers, infrastructure admins, power users
+
+::: {.notes}
+Set expectations for Session 3. It's more advanced and geared toward people who will manage the infrastructure or have complex use cases.
+:::
+
+---
+
+## Resources {.smaller}
+
+**Documentation:**
+
+- mint README: <repo>/mint/README.md
+- Stata integration guide: <repo>/mint/stata/README.md
+- data-registry catalog: <repo>/data-registry/catalog/
+
+**Getting help:**
+
+- GitHub Issues on data-registry repository
+- Lab Slack channel: #data-infrastructure
+- Office hours: Fridays 2-4pm
+
+::: {.notes}
+Provide clear paths for getting help. GitHub Issues are preferred for technical questions because answers are searchable. Office hours for hands-on help.
+:::
+
+---
+
+## Questions & Discussion {.smaller}
+
+**Let's discuss:**
+
+- What datasets would you create first?
+- What parts of your current workflow could this replace?
+- What obstacles do you foresee?
+- What additional features would help?
+
+**Demo requests:** Anything specific you want to see?
+
+::: {.notes}
+Open discussion. Gather feedback on what resonates and what concerns people have. Note feature requests for future consideration. Offer to do specific demos if time permits.
+:::
+
+---
+
+## Next Steps {.smaller}
+
+**Before Session 3:**
+
+1. Install mint if you haven't: `pip install mint`
+2. Run `mint config setup` to configure
+3. Try creating a test project
+4. Browse the data-registry catalog
+
+**Optional:** Register a real dataset and share with the team
+
+::: {.notes}
+Give homework for motivated users. Those who try it before Session 3 will get more value from advanced topics. Make it clear this is optional - we won't assume everyone has done it.
+:::
