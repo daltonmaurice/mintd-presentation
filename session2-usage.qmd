@@ -107,7 +107,7 @@ LIVE DEMO TIME. Create a project with --register flag. Show the output including
 ## What Gets Created: Directory Structure {.smaller}
 
 ```
-data_medicare_claims/
+data_cms-nppes/
 ├── README.md                 # Project documentation
 ├── metadata.json             # Searchable metadata
 ├── .git/                     # Version control
@@ -178,8 +178,8 @@ local raw_dir = mint_get_path("raw")
 local processed_dir = mint_get_path("processed")
 
 * Schema validation
-mint_validate_schema using "data/raw/claims.dta", ///
-    schema("schemas/claims.json")
+mint_validate_schema using "data/raw/nppes.dta", ///
+    schema("schemas/nppes.json")
 ```
 
 **Benefit:** Consistent logging and validation across all projects.
@@ -196,9 +196,9 @@ These utilities make Stata scripts more robust. Logging helps with debugging. Pa
 
 ```stata
 /*
-Purpose: Ingest raw Medicare claims data
+Purpose: Ingest raw NPPES data
 Input: External data source
-Output: data/raw/claims.dta
+Output: data/raw/nppes.dta
 */
 
 version 16
@@ -210,12 +210,12 @@ do "_mint_utils.do"
 mint_log_info "Starting data ingestion"
 
 // Import from external source
-local source = "$MEDICARE_DATA_DIR/claims_2023.csv"
+local source = "$NPPES_DATA_DIR/nppes_2023.csv"
 import delimited "`source'", clear
 
 // Save to raw directory
 local raw_dir = mint_get_path("raw")
-save "`raw_dir'/claims.dta", replace
+save "`raw_dir'/nppes.dta", replace
 
 mint_log_info "Ingestion complete: `=_N' observations"
 ```
@@ -232,9 +232,9 @@ Ingest is just importing and saving to raw/. Keep it simple - no transformations
 
 ```stata
 /*
-Purpose: Clean and standardize Medicare claims
-Input: data/raw/claims.dta
-Output: data/processed/claims_clean.dta
+Purpose: Clean and standardize NPPES data
+Input: data/raw/nppes.dta
+Output: data/processed/nppes_clean.dta
 */
 
 version 16
@@ -245,20 +245,20 @@ mint_log_info "Starting data cleaning"
 
 // Load raw data
 local raw_dir = mint_get_path("raw")
-use "`raw_dir'/claims.dta", clear
+use "`raw_dir'/nppes.dta", clear
 
 // Data transformations
-drop if missing(claim_id)
-rename claim_amt claim_amount
-gen claim_year = year(claim_date)
+drop if missing(npi)
+rename npi nppes_id
+gen nppes_year = year(nppes_date)
 
 // Validate expected structure
-assert !missing(claim_id)
-assert claim_amount > 0
+assert !missing(nppes_id)
+assert nppes_year == 2023
 
 // Save processed data
 local proc_dir = mint_get_path("processed")
-save "`proc_dir'/claims_clean.dta", replace
+save "`proc_dir'/nppes_clean.dta", replace
 
 mint_log_info "Cleaning complete: `=_N' observations"
 ```
@@ -276,7 +276,7 @@ Clean.do contains all transformations. Use assertions to catch data quality issu
 ```stata
 /*
 Purpose: Validate processed data meets requirements
-Input: data/processed/claims_clean.dta
+Input: data/processed/nppes_clean.dta
 Output: Validation report
 */
 
@@ -287,23 +287,23 @@ do "_mint_utils.do"
 mint_log_info "Starting data validation"
 
 local proc_dir = mint_get_path("processed")
-use "`proc_dir'/claims_clean.dta", clear
+use "`proc_dir'/nppes_clean.dta", clear
 
 // Check for required columns
-capture confirm variable claim_id claim_amount claim_year
+capture confirm variable nppes_id nppes_year
 if _rc != 0 {
     mint_log_error "Required columns missing"
     exit 1
 }
 
 // Check data quality
-count if missing(claim_amount)
+count if missing(nppes_id)
 if r(N) > 0 {
     mint_log_warning "`r(N)' rows with missing amounts"
 }
 
 // Summary stats for documentation
-summarize claim_amount
+summarize  nppes_id
 mint_log_info "Validation passed"
 ```
 

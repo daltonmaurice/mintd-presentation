@@ -82,7 +82,7 @@ Show the complete flow. Derived datasets should reference their sources. This cr
 
 ```bash
 # Create a data project for derived dataset
-mint create data --name cms_provider_claims_merged --lang stata
+mint create data --name cms_nppes_merged --lang stata
 
 # Document the merge in README.md
 # - Which datasets were merged
@@ -110,7 +110,7 @@ Derived datasets need extra documentation. How were the sources combined? What a
 ```json
 {
   "project": {
-    "name": "cms_provider_claims_merged",
+    "name": "cms_nppes_merged",
     "type": "data"
   },
   "metadata": {
@@ -118,11 +118,11 @@ Derived datasets need extra documentation. How were the sources combined? What a
     "tags": ["cms", "derived", "provider", "claims"],
     "dependencies": [
       "data_cms-provider-data-service",
-      "data_cms-claims-2024"
+      "data_cms-nppes-2024"
     ]
   },
   "lineage": {
-    "sources": ["cms-provider v1.2", "cms-claims v2.3"],
+    "sources": ["cms-provider v1.2", "cms-nppes v2.3"],
     "transformation": "src/merge_provider_claims.do",
     "date_created": "2024-01-15"
   }
@@ -184,7 +184,7 @@ The enclave workflow maintains all the benefits of the registry even in air-gapp
 ```bash
 # Create enclave workspace
 mint create enclave --name fisma_research \
-  --registry-url https://github.com/cooper-lab-yale/data-registry
+  --registry-url https://github.com/org-namee/data-registry
 
 # Workspace structure created:
 # enclave_fisma_research/
