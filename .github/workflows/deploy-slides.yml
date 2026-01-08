@@ -29,19 +29,9 @@ jobs:
         with:
           version: 1.4.550
 
-      - name: Render Quarto Presentations
+      - name: Build site
         run: |
-          quarto render session1-concepts.qmd
-          quarto render session2-usage.qmd
-          quarto render session3-advanced.qmd
-
-      - name: Create public directory
-        run: |
-          mkdir -p public
-          cp *.html public/
-          cp -r *_files public/ 2>/dev/null || true
-          cp custom.scss public/ 2>/dev/null || true
-          cp index.html public/ 2>/dev/null || true
+          make site
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
