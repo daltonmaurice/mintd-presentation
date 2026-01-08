@@ -1,7 +1,7 @@
 ---
-title: "Data Registry Framework"
-subtitle: "Session 3: Advanced Topics & Adoption"
-author: "Cooper Lab"
+title: "Mintd: Advanced Topics & Adoption"
+subtitle: "Session 3: Advanced Topics"
+author: "Maurice Dalton"
 format:
   revealjs:
     theme: [default, custom.scss]

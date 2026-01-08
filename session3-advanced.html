@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="session3-advanced_files/libs/clipboard/clipboard.min.js"></script>
+<script src="session3-advanced_files/libs/quarto-html/tabby.min.js"></script>
+<script src="session3-advanced_files/libs/quarto-html/popper.min.js"></script>
+<script src="session3-advanced_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="session3-advanced_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="session3-advanced_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="session3-advanced_files/libs/quarto-html/quarto-syntax-highlighting-de84f8d6bb715db06a919283c2d1e787.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.42">
+
+  <meta name="author" content="Maurice Dalton">
+  <title>Mintd: Advanced Topics &amp; Adoption</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="session3-advanced_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="session3-advanced_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #24292e;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #24292e; } /* Normal */
+    code span.al { color: #ff5555; font-weight: bold; } /* Alert */
+    code span.an { color: #6a737d; } /* Annotation */
+    code span.at { color: #d73a49; } /* Attribute */
+    code span.bn { color: #005cc5; } /* BaseN */
+    code span.bu { color: #d73a49; } /* BuiltIn */
+    code span.cf { color: #d73a49; } /* ControlFlow */
+    code span.ch { color: #032f62; } /* Char */
+    code span.cn { color: #005cc5; } /* Constant */
+    code span.co { color: #6a737d; } /* Comment */
+    code span.cv { color: #6a737d; } /* CommentVar */
+    code span.do { color: #6a737d; } /* Documentation */
+    code span.dt { color: #d73a49; } /* DataType */
+    code span.dv { color: #005cc5; } /* DecVal */
+    code span.er { color: #ff5555; text-decoration: underline; } /* Error */
+    code span.ex { color: #d73a49; font-weight: bold; } /* Extension */
+    code span.fl { color: #005cc5; } /* Float */
+    code span.fu { color: #6f42c1; } /* Function */
+    code span.im { color: #032f62; } /* Import */
+    code span.in { color: #6a737d; } /* Information */
+    code span.kw { color: #d73a49; } /* Keyword */
+    code span.op { color: #24292e; } /* Operator */
+    code span.ot { color: #6f42c1; } /* Other */
+    code span.pp { color: #d73a49; } /* Preprocessor */
+    code span.re { color: #6a737d; } /* RegionMarker */
+    code span.sc { color: #005cc5; } /* SpecialChar */
+    code span.ss { color: #032f62; } /* SpecialString */
+    code span.st { color: #032f62; } /* String */
+    code span.va { color: #e36209; } /* Variable */
+    code span.vs { color: #032f62; } /* VerbatimString */
+    code span.wa { color: #ff5555; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="session3-advanced_files/libs/revealjs/dist/theme/quarto-9f73478b8e5a5fd4fa9bbf4815c5710c.css">
+  <link href="session3-advanced_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="session3-advanced_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="session3-advanced_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="session3-advanced_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="session3-advanced_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="session3-advanced_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script src="session3-advanced_files/libs/quarto-diagram/mermaid.min.js"></script>
+  <script src="session3-advanced_files/libs/quarto-diagram/mermaid-init.js"></script>
+  <link href="session3-advanced_files/libs/quarto-diagram/mermaid.css" rel="stylesheet">
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Mintd: Advanced Topics &amp; Adoption</h1>
+  <p class="subtitle">Session 3: Advanced Topics</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Maurice Dalton 
+</div>
+</div>
+</div>
+
+</section>
+<section id="session-3-goals" class="slide level2 smaller">
+<h2>Session 3 Goals</h2>
+<p><strong>Advanced topics for power users:</strong></p>
+<ol type="1">
+<li>Publishing derived datasets to the registry</li>
+<li>Enclave workflows for highly sensitive data</li>
+<li>Collaboration patterns and access control</li>
+<li>Migration strategies for existing projects</li>
+<li>Governance and organizational adoption</li>
+<li>Roadmap and future capabilities</li>
+</ol>
+<p><strong>Audience:</strong> Data managers, infrastructure admins, experienced users</p>
+<aside class="notes">
+<p>This session is more technical and strategic. Not everyone needs this level of detail, but power users and administrators will benefit from understanding the full capabilities.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="publishing-derived-datasets" class="slide level2 smaller">
+<h2>Publishing Derived Datasets</h2>
+<p><strong>Scenario:</strong> You’ve created analysis-ready data that others should use</p>
+<p><strong>Example:</strong> Merged CMS provider + claims data for specific research questions</p>
+<p><strong>Why publish?</strong></p>
+<ul>
+<li>Avoid duplication of effort</li>
+<li>Ensure team uses same version</li>
+<li>Document transformation methodology</li>
+<li>Enable reproducibility</li>
+</ul>
+<p><strong>Process:</strong> Same as creating any data project + registration</p>
+<aside class="notes">
+<p>Derived datasets are valuable lab assets. Publishing them prevents everyone from doing the same merge independently. Ensures consistency across projects.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="derived-dataset-workflow" class="slide level2">
+<h2>Derived Dataset Workflow</h2>
+<div class="cell" data-reveal="true" data-fig-width="10" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class=""><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TB
+    A[Source Dataset 1] --&gt; C[Analysis Project]
+    B[Source Dataset 2] --&gt; C
+    C --&gt; D[Derived Dataset Created]
+    D --&gt; E[Document Methodology]
+    E --&gt; F[Register as New Data Product]
+    F --&gt; G[Available in Catalog]
+    G --&gt; H[Other Researchers Use It]
+
+    style D fill:#ffe1e1
+    style F fill:#e1f5ff
+    style H fill:#e1ffe1
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><strong>Key:</strong> Track dependencies on source datasets in metadata</p>
+<aside class="notes">
+<p>Show the complete flow. Derived datasets should reference their sources. This creates a data lineage graph that documents how everything is connected.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="example-publishing-merged-dataset" class="slide level2 smaller">
+<h2>Example: Publishing Merged Dataset</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a data project for derived dataset</span></span>
+<span id="cb1-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">mint</span> create data <span class="at">--name</span> cms_nppes_merged <span class="at">--lang</span> stata</span>
+<span id="cb1-3"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Document the merge in README.md</span></span>
+<span id="cb1-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># - Which datasets were merged</span></span>
+<span id="cb1-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># - What join keys were used</span></span>
+<span id="cb1-7"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># - What filters were applied</span></span>
+<span id="cb1-8"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># - What variables were kept</span></span>
+<span id="cb1-9"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Update metadata.json with dependencies</span></span>
+<span id="cb1-11"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Add tags for discoverability</span></span>
+<span id="cb1-12"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Register with catalog</span></span>
+<span id="cb1-14"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">mint</span> registry register</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Critical:</strong> Document the methodology so others can trust it</p>
+<aside class="notes">
+<p>Derived datasets need extra documentation. How were the sources combined? What assumptions were made? What quality checks were performed? This builds trust.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="metadata-for-derived-datasets" class="slide level2 smaller">
+<h2>Metadata for Derived Datasets</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb2-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb2-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"project"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"cms_nppes_merged"</span><span class="fu">,</span></span>
+<span id="cb2-4"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"data"</span></span>
+<span id="cb2-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb2-6"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"metadata"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"CMS provider and claims data merged by NPI"</span><span class="fu">,</span></span>
+<span id="cb2-8"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"tags"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"cms"</span><span class="ot">,</span> <span class="st">"derived"</span><span class="ot">,</span> <span class="st">"provider"</span><span class="ot">,</span> <span class="st">"claims"</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb2-9"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"dependencies"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb2-10"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="st">"data_cms-provider-data-service"</span><span class="ot">,</span></span>
+<span id="cb2-11"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="st">"data_cms-nppes-2024"</span></span>
+<span id="cb2-12"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb2-13"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb2-14"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"lineage"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-15"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"sources"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"cms-provider v1.2"</span><span class="ot">,</span> <span class="st">"cms-nppes v2.3"</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb2-16"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"transformation"</span><span class="fu">:</span> <span class="st">"src/merge_provider_claims.do"</span><span class="fu">,</span></span>
+<span id="cb2-17"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"date_created"</span><span class="fu">:</span> <span class="st">"2024-01-15"</span></span>
+<span id="cb2-18"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb2-19"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<aside class="notes">
+<p>Dependencies section is key. This documents the data lineage. Future researchers can trace back to original sources. Lineage section is optional but valuable for complex transformations.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="enclave-workflows-the-challenge" class="slide level2 smaller">
+<h2>Enclave Workflows: The Challenge</h2>
+<p><strong>Secure enclaves (FISMA, PHI environments):</strong></p>
+<ul>
+<li>Air-gapped: no direct internet access</li>
+<li>Strict controls on data transfer</li>
+<li>Need audit trail for compliance</li>
+<li>Can’t just <code>git clone</code> or <code>dvc pull</code></li>
+</ul>
+<p><strong>Challenge:</strong> How do we maintain reproducibility and provenance in these environments?</p>
+<aside class="notes">
+<p>Enclaves are increasingly common for sensitive health data. The usual workflows don’t work because you can’t download from internet. Need a different approach.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="enclave-solution-manifest-based-transfer" class="slide level2">
+<h2>Enclave Solution: Manifest-Based Transfer</h2>
+<p><strong>Concept:</strong> Track approved datasets and package them for transfer</p>
+<div class="cell" data-reveal="true" data-fig-width="10" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class=""><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    A[Data Registry] --&gt; B[Enclave Manifest]
+    B --&gt; C[Package Datasets]
+    C --&gt; D[Cryptographic Verification]
+    D --&gt; E[Physical Transfer USB]
+    E --&gt; F[Verify Inside Enclave]
+    F --&gt; G[Unpack Datasets]
+
+    style B fill:#ffe1e1
+    style D fill:#fff5e1
+    style F fill:#e1ffe1
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><strong>Result:</strong> Provenance tracked, compliance maintained, reproducibility preserved</p>
+<aside class="notes">
+<p>The enclave workflow maintains all the benefits of the registry even in air-gapped environments. Manifests track what’s approved. Cryptographic verification ensures data integrity.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="creating-an-enclave-workspace" class="slide level2 smaller">
+<h2>Creating an Enclave Workspace</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Create enclave workspace</span></span>
+<span id="cb3-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">mint</span> create enclave <span class="at">--name</span> fisma_research <span class="dt">\</span></span>
+<span id="cb3-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">--registry-url</span> https://github.com/org-namee/data-registry</span>
+<span id="cb3-4"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Workspace structure created:</span></span>
+<span id="cb3-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># enclave_fisma_research/</span></span>
+<span id="cb3-7"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># ├── manifest.yaml          # Approved datasets</span></span>
+<span id="cb3-8"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># ├── scripts/</span></span>
+<span id="cb3-9"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># │   ├── download.py        # Pull from registry</span></span>
+<span id="cb3-10"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># │   ├── package.py         # Create transfer bundle</span></span>
+<span id="cb3-11"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># │   └── verify.py          # Verify integrity</span></span>
+<span id="cb3-12"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># └── data/                  # Downloaded datasets</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<aside class="notes">
+<p>Enclave workspace is a special project type. It manages the list of approved datasets and provides tools for packaging and verification.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="adding-datasets-to-enclave" class="slide level2 smaller">
+<h2>Adding Datasets to Enclave</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> enclave_fisma_research</span>
+<span id="cb4-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Add approved dataset to manifest</span></span>
+<span id="cb4-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">mint</span> enclave add data_cms-provider-data-service</span>
+<span id="cb4-5"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Pull the data (outside enclave, on internet-connected machine)</span></span>
+<span id="cb4-7"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">mint</span> enclave pull data_cms-provider-data-service</span>
+<span id="cb4-8"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Pull all approved datasets</span></span>
+<span id="cb4-10"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">mint</span> enclave pull <span class="at">--all</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Manifest tracks:</strong></p>
+<ul>
+<li>Dataset name and version</li>
+<li>Git commit hash</li>
+<li>DVC file checksums</li>
+<li>Approval date and approver</li>
+</ul>
+<aside class="notes">
+<p>The manifest is the source of truth for what data is allowed in the enclave. Adding to manifest requires proper authorization. Pull commands download everything needed for transfer.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="packaging-for-transfer" class="slide level2 smaller">
+<h2>Packaging for Transfer</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Package datasets for transfer to enclave</span></span>
+<span id="cb5-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">mint</span> enclave package <span class="at">--name</span> fisma_transfer_2024_01</span>
+<span id="cb5-3"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Creates:</span></span>
+<span id="cb5-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># fisma_transfer_2024_01/</span></span>
+<span id="cb5-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># ├── datasets/              # All data files</span></span>
+<span id="cb5-7"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># ├── manifest.yaml          # What's included</span></span>
+<span id="cb5-8"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># ├── checksums.txt          # Cryptographic hashes</span></span>
+<span id="cb5-9"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># └── README.txt             # Transfer instructions</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Transfer package includes:</strong></p>
+<ul>
+<li>All data files</li>
+<li>Git repositories</li>
+<li>Verification scripts</li>
+<li>Documentation</li>
+</ul>
+<aside class="notes">
+<p>The package is self-contained. Can be transferred via USB, secure file transfer, or other approved method. Checksums ensure no corruption during transfer.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="verification-inside-enclave" class="slide level2 smaller">
+<h2>Verification Inside Enclave</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Inside the enclave, verify the transfer</span></span>
+<span id="cb6-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> verify.py fisma_transfer_2024_01/</span>
+<span id="cb6-3"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Checks:</span></span>
+<span id="cb6-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># ✓ All expected files present</span></span>
+<span id="cb6-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># ✓ Checksums match</span></span>
+<span id="cb6-7"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># ✓ No unexpected files</span></span>
+<span id="cb6-8"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># ✓ Manifest signature valid</span></span>
+<span id="cb6-9"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># If verification passes, unpack datasets</span></span>
+<span id="cb6-11"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> verify.py <span class="at">--unpack</span> fisma_transfer_2024_01/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Audit trail:</strong> All verifications logged for compliance</p>
+<aside class="notes">
+<p>Verification is critical. Ensures data wasn’t tampered with during transfer. Creates an audit trail showing what data entered the enclave and when. Compliance officers love this.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="enclave-use-case-hipaa-research" class="slide level2 smaller">
+<h2>Enclave Use Case: HIPAA Research</h2>
+<p><strong>Scenario:</strong> Analyzing patient-level Medicare data</p>
+<ol type="1">
+<li>Researcher requests access to specific datasets</li>
+<li>Data governance committee approves</li>
+<li>Datasets added to enclave manifest</li>
+<li>Data packaged and transferred by admin</li>
+<li>Researcher verifies and unpacks inside enclave</li>
+<li>Analysis proceeds with full provenance tracking</li>
+</ol>
+<p><strong>Benefit:</strong> Compliance without sacrificing reproducibility</p>
+<aside class="notes">
+<p>Real-world example. HIPAA requires careful control of PHI. Enclave workflow provides that control while maintaining research rigor. Every step is documented and auditable.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="collaboration-internal-teams" class="slide level2 smaller">
+<h2>Collaboration: Internal Teams</h2>
+<p><strong>Scenario:</strong> Multiple research projects using shared data</p>
+<p><strong>Access control strategy:</strong></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb7-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">access_control</span><span class="kw">:</span></span>
+<span id="cb7-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">teams</span><span class="kw">:</span></span>
+<span id="cb7-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">team</span><span class="kw">:</span><span class="at"> infrastructure-admins</span></span>
+<span id="cb7-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">permission</span><span class="kw">:</span><span class="at"> admin</span></span>
+<span id="cb7-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">team</span><span class="kw">:</span><span class="at"> all-researchers</span></span>
+<span id="cb7-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">permission</span><span class="kw">:</span><span class="at"> read</span></span>
+<span id="cb7-7"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">team</span><span class="kw">:</span><span class="at"> project-leads</span></span>
+<span id="cb7-8"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">permission</span><span class="kw">:</span><span class="at"> read-write</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Workflow:</strong></p>
+<ul>
+<li>All researchers can discover and use datasets</li>
+<li>Project leads can update their own datasets</li>
+<li>Admins manage infrastructure</li>
+</ul>
+<aside class="notes">
+<p>Team-based permissions scale well. Don’t manage individual access for every dataset. Use teams that align with organizational structure.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="collaboration-external-partners" class="slide level2">
+<h2>Collaboration: External Partners</h2>
+<p><strong>Scenario:</strong> Collaborating with researchers at another institution</p>
+<p><strong>Strategy: Repository mirroring</strong></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb8-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">repository</span><span class="kw">:</span></span>
+<span id="cb8-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">github_url</span><span class="kw">:</span><span class="at"> https://github.com/cooper-lab-yale/data_study_x</span></span>
+<span id="cb8-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">visibility</span><span class="kw">:</span><span class="at"> private</span></span>
+<span id="cb8-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">mirror</span><span class="kw">:</span></span>
+<span id="cb8-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">url</span><span class="kw">:</span><span class="at"> https://github.com/Cooper-lab/data_study_x</span></span>
+<span id="cb8-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">purpose</span><span class="kw">:</span><span class="at"> external_collaboration</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Workflow:</strong></p>
+<ul>
+<li>Internal repository remains private</li>
+<li>Mirror repository shared with collaborators</li>
+<li>Automatic sync via GitHub Actions</li>
+<li>Separate access control for each</li>
+</ul>
+<aside class="notes">
+<p>Mirroring enables controlled sharing. Internal repository has full lab access. Mirror has selective access for external collaborators. Sync keeps them consistent.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="access-control-sensitivity-levels" class="slide level2">
+<h2>Access Control: Sensitivity Levels</h2>
+<p><strong>Three tiers:</strong></p>
+<p><strong>Public:</strong> No restrictions</p>
+<ul>
+<li>Reference datasets</li>
+<li>Published data</li>
+<li>Documentation</li>
+</ul>
+<p><strong>Restricted:</strong> Lab members only</p>
+<ul>
+<li>Unpublished research data</li>
+<li>Proprietary datasets</li>
+<li>Pre-publication analyses</li>
+</ul>
+<p><strong>Confidential:</strong> Named individuals only</p>
+<ul>
+<li>PHI/PII</li>
+<li>Data use agreement required</li>
+<li>Special handling</li>
+</ul>
+<aside class="notes">
+<p>Sensitivity classification drives access controls and handling procedures. Public data is easy. Confidential requires extra governance and compliance measures.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="governance-review-process" class="slide level2">
+<h2>Governance: Review Process</h2>
+<p><strong>Who can register datasets?</strong></p>
+<ul>
+<li>Anyone can create PR to register</li>
+<li>Infrastructure admin reviews and approves</li>
+<li>Automated validation checks run first</li>
+</ul>
+<p><strong>Review checklist:</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox">Metadata is complete</label></li>
+<li><label><input type="checkbox">Sensitivity classification is correct</label></li>
+<li><label><input type="checkbox">Access controls are appropriate</label></li>
+<li><label><input type="checkbox">README documentation exists</label></li>
+<li><label><input type="checkbox">Data use agreement on file (if applicable)</label></li>
+</ul>
+<aside class="notes">
+<p>Registration isn’t automatic. Human review ensures quality and compliance. Automated checks catch technical issues. Human reviewer checks policy compliance.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="governance-roles-and-responsibilities" class="slide level2">
+<h2>Governance: Roles and Responsibilities</h2>
+<p><strong>Infrastructure Admins:</strong></p>
+<ul>
+<li>Manage data-registry repository</li>
+<li>Review and merge registration PRs</li>
+<li>Configure GitHub/S3 permissions</li>
+<li>Maintain documentation</li>
+</ul>
+<p><strong>Data Stewards (optional):</strong></p>
+<ul>
+<li>Review data quality</li>
+<li>Ensure metadata standards</li>
+<li>Coordinate with compliance office</li>
+</ul>
+<p><strong>Dataset Owners:</strong></p>
+<ul>
+<li>Maintain their datasets</li>
+<li>Update documentation</li>
+<li>Respond to user questions</li>
+</ul>
+<aside class="notes">
+<p>Clear roles prevent confusion. Infrastructure admins handle technical infrastructure. Dataset owners are responsible for their data. Data stewards (if you have them) ensure quality standards.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="migration-existing-projects" class="slide level2">
+<h2>Migration: Existing Projects</h2>
+<p><strong>You have 50 existing projects in Dropbox. Now what?</strong></p>
+<p><strong>Migration strategy:</strong></p>
+<ol type="1">
+<li>Prioritize high-value datasets</li>
+<li>Create mint projects for each</li>
+<li>Document with metadata</li>
+<li>Register in catalog</li>
+<li>Migrate users gradually</li>
+</ol>
+<p><strong>Don’t:</strong> Try to migrate everything at once</p>
+<p><strong>Do:</strong> Start with most-used datasets</p>
+<aside class="notes">
+<p>Migration is gradual. Don’t force everyone to switch immediately. Migrate high-value datasets first. Let early adopters prove the value. Others will follow.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="migration-workflow" class="slide level2">
+<h2>Migration Workflow</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># For each existing dataset:</span></span>
+<span id="cb9-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Create project structure</span></span>
+<span id="cb9-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">mint</span> create data <span class="at">--name</span> existing_dataset <span class="at">--lang</span> stata <span class="at">--use-current-repo</span></span>
+<span id="cb9-5"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Organize files into standard structure</span></span>
+<span id="cb9-7"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># - Move raw data to data/raw/</span></span>
+<span id="cb9-8"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># - Move scripts to src/</span></span>
+<span id="cb9-9"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># - Create README</span></span>
+<span id="cb9-10"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Add to version control</span></span>
+<span id="cb9-12"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add .</span>
+<span id="cb9-13"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Migrate existing dataset to mint structure"</span></span>
+<span id="cb9-14"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Track data with DVC</span></span>
+<span id="cb9-16"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">dvc</span> add data/raw/<span class="pp">*</span>.dta</span>
+<span id="cb9-17"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">dvc</span> push</span>
+<span id="cb9-18"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Register with catalog</span></span>
+<span id="cb9-20"><a href="" aria-hidden="true" tabindex="-1"></a><span class="ex">mint</span> registry register</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<aside class="notes">
+<p>Step-by-step migration. The –use-current-repo flag handles existing git repos. Organizing files is manual but guided by templates. Registration makes it discoverable.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="measuring-success" class="slide level2">
+<h2>Measuring Success</h2>
+<p><strong>Metrics to track:</strong></p>
+<ul>
+<li>Number of registered datasets</li>
+<li>Number of active users</li>
+<li>Time to onboard new researchers</li>
+<li>Datasets reused across projects</li>
+<li>Compliance audit findings</li>
+</ul>
+<p><strong>Qualitative indicators:</strong></p>
+<ul>
+<li>“I found the data I needed in 5 minutes”</li>
+<li>“New postdoc was productive on day 1”</li>
+<li>“IRB audit had no findings”</li>
+</ul>
+<aside class="notes">
+<p>Track both quantitative and qualitative metrics. Numbers show adoption. User testimonials show value. Compliance success shows risk reduction.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="adoption-roadmap-phase-1-months-1-3" class="slide level2">
+<h2>Adoption Roadmap: Phase 1 (Months 1-3)</h2>
+<p><strong>Goals:</strong></p>
+<ul>
+<li>Infrastructure setup complete</li>
+<li>Core documentation written</li>
+<li>5-10 pilot datasets registered</li>
+<li>Early adopters trained</li>
+</ul>
+<p><strong>Success criteria:</strong></p>
+<ul>
+<li>Catalog searchable</li>
+<li>Registration workflow working</li>
+<li>At least one success story</li>
+</ul>
+<aside class="notes">
+<p>Start small. Get infrastructure working. Recruit early adopters who will provide feedback. Document success stories to motivate wider adoption.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="adoption-roadmap-phase-2-months-4-6" class="slide level2">
+<h2>Adoption Roadmap: Phase 2 (Months 4-6)</h2>
+<p><strong>Goals:</strong></p>
+<ul>
+<li>All new projects use mint</li>
+<li>25-50% of valuable datasets migrated</li>
+<li>Training sessions held</li>
+<li>Documentation refined based on feedback</li>
+</ul>
+<p><strong>Success criteria:</strong></p>
+<ul>
+<li>Self-service works for basic cases</li>
+<li>Support burden is manageable</li>
+<li>Positive user feedback</li>
+</ul>
+<aside class="notes">
+<p>Expand adoption. Make it the default for new projects. Migrate most-used existing datasets. Refine processes based on real usage.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="adoption-roadmap-phase-3-months-7-12" class="slide level2">
+<h2>Adoption Roadmap: Phase 3 (Months 7-12)</h2>
+<p><strong>Goals:</strong></p>
+<ul>
+<li>75%+ of active datasets in registry</li>
+<li>Compliance office integration</li>
+<li>Automated reporting</li>
+<li>External collaboration enabled</li>
+</ul>
+<p><strong>Success criteria:</strong></p>
+<ul>
+<li>Registry is “how we work”</li>
+<li>Reduced support burden (self-service)</li>
+<li>Measurable productivity gains</li>
+</ul>
+<aside class="notes">
+<p>Full adoption. Registry becomes the standard way of working. Automation reduces overhead. Integration with institutional processes (IRB, compliance) complete.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="common-challenges-solutions" class="slide level2">
+<h2>Common Challenges &amp; Solutions</h2>
+<p><strong>Challenge:</strong> “Too much overhead for small projects”</p>
+<p><strong>Solution:</strong> Templates make it fast. 5 minutes to create project structure.</p>
+<p><strong>Challenge:</strong> “I don’t want to learn Git”</p>
+<p><strong>Solution:</strong> Wrapper functions hide complexity. Basic use is simple.</p>
+<p><strong>Challenge:</strong> “What if the framework changes?”</p>
+<p><strong>Solution:</strong> Standards-based (Git, DVC, YAML). Can always export.</p>
+<aside class="notes">
+<p>Address common objections proactively. Most concerns come from unfamiliarity. Once people see how fast and simple it is, resistance decreases.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="support-strategy" class="slide level2">
+<h2>Support Strategy</h2>
+<p><strong>Tiered support model:</strong></p>
+<p><strong>Self-service:</strong></p>
+<ul>
+<li>Comprehensive documentation</li>
+<li>Video tutorials</li>
+<li>Example projects</li>
+</ul>
+<p><strong>Peer support:</strong></p>
+<ul>
+<li>Lab Slack channel</li>
+<li>GitHub Discussions</li>
+</ul>
+<p><strong>Direct support:</strong></p>
+<ul>
+<li>Office hours (weekly)</li>
+<li>Email for urgent issues</li>
+</ul>
+<p><strong>Key:</strong> Make self-service so good that most questions are answered there</p>
+<aside class="notes">
+<p>Support burden must be sustainable. Invest in documentation and examples upfront. Peer support builds community. Reserve direct support for complex issues.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="future-capabilities" class="slide level2">
+<h2>Future Capabilities</h2>
+<p><strong>Planned enhancements:</strong></p>
+<ul>
+<li><strong>Web interface</strong> for browsing catalog (no more GitHub search)</li>
+<li><strong>API access</strong> for programmatic discovery</li>
+<li><strong>Usage analytics</strong> to track dataset popularity</li>
+<li><strong>Citation tracking</strong> for datasets used in publications</li>
+<li><strong>Automated quality checks</strong> on data updates</li>
+<li><strong>Integration with lab notebooks</strong> (electronic lab notebooks)</li>
+</ul>
+<aside class="notes">
+<p>Show the vision. Current system works, but there’s room for improvement. Web interface is highest priority - will make discovery much easier for non-technical users.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="web-interface-preview" class="slide level2">
+<h2>Web Interface Preview</h2>
+<p><strong>Planned features:</strong></p>
+<ul>
+<li>Browse datasets like a library catalog</li>
+<li>Filter by tags, sensitivity, language, date</li>
+<li>See dataset relationships (lineage graph)</li>
+<li>Request access with one click</li>
+<li>Download usage stats</li>
+<li>Subscribe to dataset updates</li>
+</ul>
+<p><strong>Status:</strong> Design phase, contributions welcome</p>
+<aside class="notes">
+<p>Web interface will be game-changer for adoption. Visual browsing is more intuitive than YAML files. Request access workflow streamlines permissions. Make it clear this is coming but not ready yet.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="integration-opportunities" class="slide level2">
+<h2>Integration Opportunities</h2>
+<p><strong>The registry can integrate with:</strong></p>
+<ul>
+<li><strong>IRB systems:</strong> Auto-populate data use documentation</li>
+<li><strong>Lab management systems:</strong> Link datasets to projects</li>
+<li><strong>Citation managers:</strong> Generate data citations</li>
+<li><strong>Compute clusters:</strong> Provision data to HPC environments</li>
+<li><strong>Notebooks:</strong> One-click load into Jupyter/RStudio</li>
+</ul>
+<p><strong>Key:</strong> Open standards enable integrations</p>
+<aside class="notes">
+<p>Registry is extensible. Git/YAML/DVC are open standards. Easy to build integrations with institutional systems. Each integration adds value.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="contributing-to-the-framework" class="slide level2">
+<h2>Contributing to the Framework</h2>
+<p><strong>How to get involved:</strong></p>
+<ul>
+<li>Report bugs and feature requests (GitHub Issues)</li>
+<li>Contribute documentation improvements</li>
+<li>Share example workflows</li>
+<li>Develop integrations</li>
+<li>Help with code review</li>
+</ul>
+<p><strong>Governance:</strong> Open to lab contributions with infrastructure admin oversight</p>
+<aside class="notes">
+<p>Framework succeeds when users contribute. Lower barrier for participation. Documentation and examples are great starter contributions. Code contributions welcome but reviewed carefully.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="key-takeaways-advanced-topics" class="slide level2">
+<h2>Key Takeaways: Advanced Topics</h2>
+<ol type="1">
+<li><strong>Derived datasets</strong> should be registered for reuse</li>
+<li><strong>Enclave workflows</strong> enable secure research while maintaining provenance</li>
+<li><strong>Access control</strong> scales via teams and sensitivity classification</li>
+<li><strong>Migration</strong> should be gradual, starting with high-value datasets</li>
+<li><strong>Governance</strong> requires clear roles and review processes</li>
+<li><strong>Success</strong> comes from sustainable support and continuous improvement</li>
+</ol>
+<aside class="notes">
+<p>Recap advanced topics. These capabilities enable sophisticated use cases while maintaining the simplicity of basic workflows. Power users can do complex things; casual users aren’t overwhelmed.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="organizational-benefits" class="slide level2">
+<h2>Organizational Benefits</h2>
+<p><strong>What leadership cares about:</strong></p>
+<ul>
+<li><strong>Research Rigor:</strong> Reproducibility and provenance</li>
+<li><strong>Compliance:</strong> Audit trails and access controls</li>
+<li><strong>Efficiency:</strong> Faster onboarding and reduced duplication</li>
+<li><strong>Collaboration:</strong> Breaking down silos</li>
+<li><strong>Risk Management:</strong> Proper handling of sensitive data</li>
+<li><strong>Grant Competitiveness:</strong> Demonstrates data management plan</li>
+</ul>
+<aside class="notes">
+<p>Frame benefits in terms leadership understands. This isn’t just a technical project - it’s strategic infrastructure that supports research excellence and compliance.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="getting-started-action-items" class="slide level2">
+<h2>Getting Started: Action Items</h2>
+<p><strong>For Individual Researchers:</strong></p>
+<ol type="1">
+<li>Install mint and try creating a test project</li>
+<li>Register one dataset you maintain</li>
+<li>Provide feedback on what works/doesn’t</li>
+</ol>
+<p><strong>For Data Managers:</strong></p>
+<ol type="1">
+<li>Review migration priorities</li>
+<li>Identify early adopter projects</li>
+<li>Plan training sessions</li>
+</ol>
+<p><strong>For Leadership:</strong></p>
+<ol type="1">
+<li>Allocate resources for infrastructure admin time</li>
+<li>Endorse adoption in lab policy</li>
+<li>Include in onboarding process</li>
+</ol>
+<aside class="notes">
+<p>Clear action items for different roles. Everyone can contribute. Researchers experiment. Data managers plan. Leadership enables.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="resources-documentation" class="slide level2">
+<h2>Resources &amp; Documentation</h2>
+<p><strong>Official Documentation:</strong></p>
+<ul>
+<li>mint CLI: <code>/mint/README.md</code></li>
+<li>data-registry: <code>/data-registry/README.md</code></li>
+<li>Stata integration: <code>/mint/stata/README.md</code></li>
+</ul>
+<p><strong>Support Channels:</strong></p>
+<ul>
+<li>GitHub Issues: Technical questions</li>
+<li>Lab Slack: #data-infrastructure</li>
+<li>Office Hours: Fridays 2-4pm</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<ul>
+<li>CMS Provider Data: <code>catalog/data/data_cms-provider-data-service.yaml</code></li>
+<li>Template Projects: <code>/mint/src/mint/files/</code></li>
+</ul>
+<aside class="notes">
+<p>Provide comprehensive resource list. Different learning styles need different materials. Point to specific examples for common use cases.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="recap-three-session-series" class="slide level2">
+<h2>Recap: Three-Session Series</h2>
+<p><strong>Session 1:</strong> Understanding why this matters</p>
+<ul>
+<li>Pain points of current approach</li>
+<li>Vision for better data management</li>
+<li>High-level architecture</li>
+</ul>
+<p><strong>Session 2:</strong> Learning to use the framework</p>
+<ul>
+<li>Creating and discovering projects</li>
+<li>Stata workflows</li>
+<li>Best practices</li>
+</ul>
+<p><strong>Session 3 (Today):</strong> Advanced capabilities</p>
+<ul>
+<li>Derived datasets and enclaves</li>
+<li>Governance and migration</li>
+<li>Organizational adoption</li>
+</ul>
+<aside class="notes">
+<p>Remind attendees of the journey. Session 1 motivated. Session 2 enabled. Session 3 empowered. Together they provide complete understanding.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="final-thoughts" class="slide level2">
+<h2>Final Thoughts</h2>
+<p><strong>The framework succeeds when:</strong></p>
+<ul>
+<li>It makes researchers more productive (not more burdened)</li>
+<li>It solves real problems (not theoretical ones)</li>
+<li>It grows organically (not forced adoption)</li>
+<li>It evolves based on feedback (not rigid plans)</li>
+</ul>
+<p><strong>Your feedback shapes the future</strong> - please share ideas and concerns!</p>
+<aside class="notes">
+<p>End on collaborative note. This is lab infrastructure built for the lab. Success requires buy-in and participation. Feedback is genuinely welcomed and will influence priorities.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="questions-discussion" class="slide level2">
+<h2>Questions &amp; Discussion</h2>
+<p><strong>Discussion topics:</strong></p>
+<ul>
+<li>What advanced capabilities matter most for your work?</li>
+<li>What migration challenges do you foresee?</li>
+<li>What governance concerns need addressing?</li>
+<li>What integrations would add value?</li>
+<li>What should we prioritize next?</li>
+</ul>
+<p><strong>Let’s make this framework work for the lab!</strong></p>
+<aside class="notes">
+<p>Open discussion for remaining time. Capture ideas and concerns. Identify champions who can help drive adoption. End with enthusiasm and clear next steps.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="thank-you" class="slide level2">
+<h2>Thank You!</h2>
+<p><strong>This framework represents:</strong></p>
+<ul>
+<li>A commitment to research excellence</li>
+<li>Investment in reproducibility</li>
+<li>Recognition that data management matters</li>
+<li>Foundation for future collaboration</li>
+</ul>
+<p><strong>Let’s build something great together.</strong></p>
+<p><strong>Next steps:</strong> Check your email for follow-up resources and hands-on workshop times.</p>
+<aside class="notes">
+<p>End on inspiring note. Thank everyone for their time and engagement. Remind them of concrete next steps. Make it clear you’re available for follow-up questions.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="session3-advanced_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="session3-advanced_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="session3-advanced_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="session3-advanced_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="session3-advanced_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="session3-advanced_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="session3-advanced_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="session3-advanced_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="session3-advanced_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="session3-advanced_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="session3-advanced_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': true,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>

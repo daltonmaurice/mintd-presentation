@@ -1,7 +1,7 @@
 ---
-title: "Data Registry Framework"
-subtitle: "Session 2: Using the Framework with Stata"
-author: "Cooper Lab"
+title: "Mintd: Using the Framework with Stata"
+subtitle: "Session 2: Usage & Best Practices"
+author: "Maurice Dalton"
 format:
   revealjs:
     theme: [default, custom.scss]
@@ -633,12 +633,12 @@ Only do this if session time allows. Otherwise, offer office hours or follow-up 
 
 ---
 
-## Real Example: Medicare Claims Pipeline {.smaller}
+## Real Example: CMS NPPES data {.smaller}
 
 **Structure:**
 
 ```
-data_medicare_claims/
+data_nppes/
 ├── src/
 │   ├── ingest.do          # Import from CMS
 │   ├── clean.do           # Standardize fields
@@ -646,7 +646,7 @@ data_medicare_claims/
 │   ├── validate.do        # Check completeness
 │   └── analyze.do         # Summary statistics
 ├── data/
-│   ├── raw/claims_*.csv   # Original CMS files
+│   ├── raw/nppes_*.csv   # Original CMS files
 │   └── processed/         # Analysis-ready data
 └── notebooks/
     └── exploratory.do      # Ad-hoc analysis
@@ -742,7 +742,7 @@ Open discussion. Gather feedback on what resonates and what concerns people have
 
 **Before Session 3:**
 
-1. Install mint if you haven't: `pip install mint`
+1. Install mint if you haven't: `pip install mintd`
 2. Run `mint config setup` to configure
 3. Try creating a test project
 4. Browse the data-registry catalog

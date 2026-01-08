@@ -1,7 +1,7 @@
 ---
-title: "Data Registry Framework"
-subtitle: "Session 1: Concepts & Motivation"
-author: "Maurice dalton"
+title: "Mintd: Concepts & Motivation"
+subtitle: "Session 1: Introduction"
+author: "Maurice Dalton"
 format:
   revealjs:
     theme: [default, custom.scss]
