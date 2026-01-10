@@ -3,7 +3,7 @@
 *_cache/
 /.quarto/
 public/
-
+*.html
 # HTML output (tracked in git for GitHub Pages, but can be regenerated)
 # Uncomment if you want to exclude HTML files:
 # *.html

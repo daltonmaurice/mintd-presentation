@@ -84,18 +84,24 @@ Transition to the vision. Each of these benefits directly addresses a pain point
 
 **Key principle:** Make the right thing easy.
 
-**Three simple pieces that work together:**
+:::: {.columns}
+::: {.column width="50%"}
+**Three simple pieces:**
 
-1. **Centralized Catalog** - One place to register and find all datasets
-2. **Standardized Projects** - Consistent structure everyone understands
-3. **Automated Workflows** - Version control and provenance tracking handled for you
+1. **Centralized Catalog** - Register and find all datasets
+2. **Standardized Projects** - Consistent project structure
+3. **Automated Workflows** - Version control & provenance
+:::
 
-**The framework helps with setup:**
+::: {.column width="50%"}
+**Framework setup help:**
 
-- Configures S3 bucket access for data storage
-- Sets up DVC (Data Version Control) automatically
+- Configures S3 bucket access
+- Sets up DVC automatically
 - Manages credentials securely
 - Creates standard project structure
+:::
+::::
 
 
 ::: {.notes}
@@ -124,7 +130,8 @@ Keep the architecture simple at this level. Emphasize that the framework handles
 - Contains: libraries, packages, documentation
 
 ::: {.notes}
-Show concrete examples of each type. Data products are datasets that multiple projects use. Analysis projects are specific research questions. Infrastructure is shared code that multiple projects need. This separation keeps things organized and enables reuse.
+Show concrete examples of each type. Data products are datasets that multiple projects use. Analysis projects are specific research questions. 
+Infrastructure is shared code that multiple projects need. This separation keeps things organized and enables reuse.
 :::
 
 ---
@@ -195,6 +202,25 @@ This is critical for research rigor. Journals and funders increasingly require r
 
 ---
 
+## Looking Ahead: AI-Assisted Research {.smaller}
+
+**The lab is preparing to incorporate AI-assisted coding tools.**
+
+These tools can accelerate research, but they require strong version control:
+
+- **Track AI-generated changes:** Git lets you review and audit modifications made by AI code pilots
+- **Protect your data:** DVC ensures data versions remain stable even as code evolves rapidly
+- **Enable experimentation:** Version control makes it safe to try AI suggestions - you can always revert
+- **Maintain reproducibility:** Critical when code changes come from multiple sources (you + AI)
+
+**Bottom line:** Learning Git and DVC now is non-negotiable preparation for the next phase of lab workflows.
+
+::: {.notes}
+Be direct about the importance without overselling. AI tools are coming to the lab and version control becomes even more essential when you have AI making code changes. You need to track what changed, when, and be able to revert if needed. This is practical preparation, not just best practice.
+:::
+
+---
+
 ## Example: CMS Provider Data {.smaller}
 
 ```yaml
@@ -240,7 +266,8 @@ Show real example from your lab. Point out how metadata makes it discoverable (t
 **Result:** Secure by default, compliant with data use agreements.
 
 ::: {.notes}
-Access control is crucial for PHI/PII and data use agreements. The framework enforces policies automatically rather than relying on manual Dropbox folder sharing.
+Access control is crucial for data use agreements. The framework enforces policies automatically rather than relying 
+on manual Dropbox folder sharing.
 :::
 
 ---
@@ -257,7 +284,8 @@ Access control is crucial for PHI/PII and data use agreements. The framework enf
 **vs. Current:** "Here are 47 Dropbox links, good luck figuring out what's what"
 
 ::: {.notes}
-Onboarding efficiency is a huge win. Junior researchers can be productive immediately because everything is documented and discoverable. No need for extensive institutional knowledge.
+Onboarding efficiency is a huge win. Junior researchers can be productive immediately because everything 
+is documented and discoverable. No need for extensive institutional knowledge.
 :::
 
 ---
@@ -277,7 +305,8 @@ Onboarding efficiency is a huge win. Junior researchers can be productive immedi
 - Collaborators get same reproducible workflows
 
 ::: {.notes}
-Breaking down silos. Different research projects can build on each other's work. External collaborators can access exactly what they need without full lab access.
+Breaking down silos. Different research projects can build on each other's work. 
+External collaborators can access exactly what they need without full lab access.
 :::
 
 ---
@@ -410,8 +439,6 @@ Reinforce the main messages. The framework solves real problems, makes researche
 
 **Discussion points:**
 
-- What datasets would you want to register first?
-- What current pain points resonate most?
 - What concerns do you have about adoption?
 
 **Next:** Session 2 will include live demos and hands-on examples
