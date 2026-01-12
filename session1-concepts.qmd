@@ -112,22 +112,37 @@ Keep the architecture simple at this level. Emphasize that the framework handles
 
 ## Three Project Types {.smaller}
 
-**Data Products** - Datasets with versioning and metadata
+:::: {.columns}
 
-- Example: `data_cms-provider-data-service` - CMS provider reference data
-- Example: `data_cms-impactfile` - Medicare claims for analysis
-- Contains: raw data, cleaning scripts, processed outputs
+::: {.column width="50%"}
+**1. Data Products**
+*Foundation of the lab*
+- **Role:** Cleaning & processing
+- **Output:** Versioned datasets
+- **Example:** `data_cms-impactfile`
+- **Contains:** Raw data, cleaning scripts
 
-**Analysis Projects** - Research projects that use data products
+<br>
 
-- Example: `prj_price-quality` - Analysis using CMS data
-- Example: `prj_mergerheterogeneity` - ML model using claims
-- Contains: analysis code, notebooks, results, publications
+**3. Infrastructure**
+*Shared utilities*
+- **Role:** Reusable tools
+- **Example:** `infra_provider-xw`
+:::
 
-**Infrastructure** - Shared tools and utilities
+::: {.column width="50%"}
+**2. Analysis Projects**
+*Research applications*
+- **Role:** Answering questions
+- **Input:** Uses Data Products
+- **Example:** `prj_price-quality`
+- **Contains:** 
+  - Analysis code
+  - Quartos/Notebooks
+  - Final results
+:::
 
-- Example: `infra_provider-xw` - Reusable CMS crosswalks
-- Contains: libraries, packages, documentation
+::::
 
 ::: {.notes}
 Show concrete examples of each type. Data products are datasets that multiple projects use. Analysis projects are specific research questions. 
