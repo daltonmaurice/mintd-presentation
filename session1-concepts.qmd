@@ -116,7 +116,7 @@ Keep the architecture simple at this level. Emphasize that the framework handles
 
 ::: {.column width="50%"}
 **1. Data Products**
-*Foundation of the lab*
+*Data foundations, reusable datasets*
 - **Role:** Cleaning & processing
 - **Output:** Versioned datasets
 - **Example:** `data_cms-impactfile`
@@ -132,14 +132,14 @@ Keep the architecture simple at this level. Emphasize that the framework handles
 
 ::: {.column width="50%"}
 **2. Analysis Projects**
-*Research applications*
+*Research projects, specific questions*
 - **Role:** Answering questions
 - **Input:** Uses Data Products
 - **Example:** `prj_price-quality`
 - **Contains:** 
   - Analysis code
-  - Quartos/Notebooks
-  - Final results
+  - code taken of enclaves 
+  - Final code / results 
 :::
 
 ::::
