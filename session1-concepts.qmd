@@ -204,7 +204,7 @@ This is critical for research rigor. Journals and funders increasingly require r
 
 ## Looking Ahead: AI-Assisted Research {.smaller}
 
-**The lab is preparing to incorporate AI-assisted coding tools.**
+** AI-assisted coding tools are becoming ubiquitous.**
 
 These tools can accelerate research, but they require strong version control:
 
@@ -213,11 +213,9 @@ These tools can accelerate research, but they require strong version control:
 - **Enable experimentation:** Version control makes it safe to try AI suggestions - you can always revert
 - **Maintain reproducibility:** Critical when code changes come from multiple sources (you + AI)
 
-**Bottom line:** Learning Git and DVC now is non-negotiable preparation for the next phase of lab workflows.
+**Bottom line:** Learning Git and DVC will prepare you for AI-assisted research.
 
-::: {.notes}
-Be direct about the importance without overselling. AI tools are coming to the lab and version control becomes even more essential when you have AI making code changes. You need to track what changed, when, and be able to revert if needed. This is practical preparation, not just best practice.
-:::
+
 
 ---
 
@@ -262,6 +260,7 @@ Show real example from your lab. Point out how metadata makes it discoverable (t
 - **Individual grants** for specific cases
 - **Automatic sync** to GitHub repositories and S3 storage
 - **Audit trail:** Git history shows who changed what
+
 
 **Result:** Secure by default, compliant with data use agreements.
 
